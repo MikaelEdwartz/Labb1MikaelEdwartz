@@ -36,8 +36,7 @@ public class Labboration1 {
             if (Integer.parseInt(input) == 3)
                 printSortedArray(sortedArray(electricPrices));
             if (Integer.parseInt(input) == 4)
-                printPricePerHour();
-
+                calculateCheapest4Hours();
 
 
         }
@@ -192,7 +191,18 @@ public class Labboration1 {
 
     private static void calculateCheapest4Hours(){
         int fourHourPrice = 0;
+        int helper = Integer.MAX_VALUE;
+        int timeToStartCharge = 0;
+        for (int i = 0; i < electricPrices.length-4; i++) {
+            fourHourPrice = electricPrices[i].getPrice() + electricPrices[i+1].getPrice() + electricPrices[i+2].getPrice() + electricPrices[i+4].getPrice();
+            if(fourHourPrice < helper){
+                helper = fourHourPrice;
+                timeToStartCharge = electricPrices[i].getPosition();
+            }
 
+        }
+
+        System.out.println("Mellan klockan " + electricPrices[timeToStartCharge+1].getTime() + " och " + electricPrices[timeToStartCharge+5].getTime() + " är det billigast att ladda. Medelpriset under de fyra timmarna är "+ (helper/4) );
     }
 
 
