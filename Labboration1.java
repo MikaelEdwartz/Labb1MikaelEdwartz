@@ -1,5 +1,6 @@
 package se.iths.labborationer;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Labboration1 {
@@ -33,8 +34,7 @@ public class Labboration1 {
                 minMaxMedel(electricPrices);
 
             if (Integer.parseInt(input) == 3)
-                printPricePerHour();
-
+                printSortedArray(sortedArray(electricPrices));
             if (Integer.parseInt(input) == 4)
                 printPricePerHour();
 
@@ -79,7 +79,7 @@ public class Labboration1 {
 
             askPriceAndPrintTime(i);
             int priceInput = scanner.nextInt();
-            electricPrices[i] = new ElectricData(i, priceInput);
+            electricPrices[i] = new ElectricData(i, priceInput, i);
 
         }
     }
@@ -161,6 +161,46 @@ public class Labboration1 {
         }
         return highestPrice;
     }
+
+    //Skapar en ny array och sorterar på billigaste priset.
+    private static ElectricData[] sortedArray(ElectricData[] array){
+        ElectricData[] sortedArray = Arrays.copyOf(array, 24);
+        ElectricData priceHelper = new ElectricData(0,0,0);
+
+        for (int i = 0; i < sortedArray.length; i++) {
+            for (int j = 0; j < sortedArray.length-1; j++) {
+                if(sortedArray[j].getPrice() > sortedArray[j+1].getPrice()){
+                    priceHelper = sortedArray[j];
+                    sortedArray[j] = sortedArray[j+1];
+                    sortedArray[j+1] = priceHelper;
+
+                }
+            }
+        }
+
+
+
+        return sortedArray;
+    }
+    //printar ut den sorterade arrayn med billigaste priset först.
+    private static void printSortedArray(ElectricData[] array){
+        for (int i = 0; i < array.length; i++) {
+
+            System.out.println(printTimes(array[i].getPosition()) + " " + array[i].getPrice() + " öre");
+        }
+    }
+
+    private static void calculateCheapest4Hours(){
+        int fourHourPrice = 0;
+
+    }
+
+
 }
 
+/*¨
+* loopa genom array med electricdata objekt
+* electriddataarray[i] är billigare än
+*
+* */
 
