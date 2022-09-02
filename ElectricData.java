@@ -22,14 +22,6 @@ public class ElectricData {
         return this.originalPosition;
     }
 
-
-    public void setTime(int time){
-        this.time = time;
-    }
-    public void setElectricPrice(int price){
-        this.electricPrice = price;
-    }
-
     public int getPrice(){
         return this.electricPrice;
     }
