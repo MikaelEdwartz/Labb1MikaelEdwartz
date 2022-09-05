@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Labboration1 {
 
-    static ElectricData[] electricPrices;
+    static ElectricData[] electricPrices = new ElectricData[24];
     static int timeAtLowest;
     static int timeAtHighest;
     static int lowestPrice = Integer.MAX_VALUE;
@@ -23,30 +23,33 @@ public class Labboration1 {
         boolean loop = true;
 
         while (loop) {
-
             greeting();
-
             String input = scanner.nextLine();
 
-            switch (input) {
-                case "1" -> autoAddElectricPrices();//inmatning(scanner); för manuell inmatning
-                case "2" -> minMaxMedel(electricPrices);
-                case "3" -> printSortedArray(sortArray(electricPrices));
-                case "4" -> calculateCheapest4Hours();
-                case "5" -> createAndPrintGraph();
-                case "e" -> loop = false;
-            }
+            loop = menuOptions(loop, input);
         }
 
     }
 
+    private static boolean menuOptions(boolean loop, String input) {
+        switch (input) {
+            case "1" -> autoAddElectricPrices();  //inmatning(scanner); för manuell inmatning
+            case "2" -> printHighestLowestAndAverage(electricPrices);
+            case "3" -> printSortedArray(sortArray(electricPrices));
+            case "4" -> calculateCheapest4Hours();
+            case "5" -> createAndPrintGraph();
+            case "e" -> loop = false;
+        }
+        return loop;
+    }
+
     public static void autoAddElectricPrices() {
-        electricPrices = new ElectricData[24];
         for (int i = 0; i < 24; i++) {
 
             int priceInput = (int) (Math.random() * 520) + 1;
             electricPrices[i] = new ElectricData(i, priceInput);
         }
+        getHighestAndLowestPrices(electricPrices);
     }
 
     //printar ut menyn för användaren.
@@ -61,30 +64,22 @@ public class Labboration1 {
     }
     //printar ut vad priset är mellan de olika klockslagen.
 
-
-    private static int getPrice(ElectricData[] electricPrices, int i) {
-        return electricPrices[i].getPrice();
-    }
-
-    public static void inmatning(Scanner scanner) {
+    public static void inputPricesToArray(Scanner scanner) {
 
         electricPrices = new ElectricData[24];
         addPricesToArray(scanner);
     }
-    //tog bort return electricprices ////
 
 
     // Metod för alternativ 1 i menyn, frågar efter elpris och sparar det i en array.
     //lägger till pris/tid objekten till en array.
     private static void addPricesToArray(Scanner scanner) {
         for (int i = 0; i < 24; i++) {
-
-            askPriceAndPrintTime(i);
-            int priceInput = scanner.nextInt();
-            electricPrices[i] = new ElectricData(i, priceInput);
-
+            setPricesToArray(scanner, i);
         }
+        getHighestAndLowestPrices(electricPrices);
     }
+
 
     //printar ut tiden när användaren frågas efter elpriser under dygnet.
     private static void askPriceAndPrintTime(int i) {
@@ -92,42 +87,55 @@ public class Labboration1 {
         System.out.println("Vad var priset mellan kl " + printHour(i) + "?");
     }
 
+    private static void setPricesToArray(Scanner scanner, int i) {
+        askPriceAndPrintTime(i);
+        int priceInput = scanner.nextInt();
+        electricPrices[i] = new ElectricData(i, priceInput);
+    }
 
     //letar reda på min, och max pris, samt räknar ut dagens medel.
 
-    public static void minMaxMedel(ElectricData[] array) {
+    public static void printHighestLowestAndAverage(ElectricData[] array) {
 
-        for (int i = 0; i < 24; i++) {
-            highestPrice = getHighestPrice(array, highestPrice, i);
-            lowestPrice = getLowestPrice(array, lowestPrice, i);
-        }
+
         int averagePrice = averagePricePerDay(array);
+        printHighestLowestAverage(highestPrice, timeAtHighest, timeAtLowest, averagePrice);
+    }
 
-        printHighestLowestAverage(highestPrice, timeAtHighest, lowestPrice, timeAtLowest, averagePrice);
+    private static void getHighestAndLowestPrices(ElectricData[] array) {
+        getHighestPriceOfDay(array);
+        getLowestPriceOfDay(array);
+    }
+
+    private static int getPrice(ElectricData[] electricPrices, int i) {
+        return electricPrices[i].getPrice();
     }
 
     //räknar ut vilket det lägsta priset under dagen var. Samt sparar vilken tid det inträffade.
-    private static int getLowestPrice(ElectricData[] array, int lowestPrice, int i) {
-        if (getPrice(array, i) < lowestPrice) {
-            lowestPrice = getPrice(array, i);
-            timeAtLowest = i;
+    private static void getLowestPriceOfDay(ElectricData[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (getPrice(array, i) < lowestPrice) {
+                lowestPrice = getPrice(array, i);
+                timeAtLowest = i;
+            }
         }
-        return lowestPrice;
     }
 
     //räknar ut vilket det högsta priset under dagen var. Samt sparar vilken tid det inträffade.
-    private static int getHighestPrice(ElectricData[] array, int highestPrice, int i) {
+    private static void getHighestPriceOfDay(ElectricData[] array) {
 
-        if (getPrice(array, i) > highestPrice) {
-            highestPrice = getPrice(array, i);
-            timeAtHighest = i;
+        for (int i = 0; i < array.length; i++) {
+            if (getPrice(array, i) > highestPrice) {
+                highestPrice = getPrice(array, i);
+                timeAtHighest = i;
+
+            }
         }
-        return highestPrice;
     }
 
 
     //printar ut vilket pris som var högst, lägst samt medelpriset under dygnet, vilka timmar som de inträffar på.
-    private static void printHighestLowestAverage(int highestPrice, int timeAtHighest, int lowestPrice, int timeAtLowest, int averagePrice) {
+    private static void printHighestLowestAverage(int highestPrice, int timeAtHighest, int timeAtLowest, int averagePrice) {
         System.out.println("Det högsta priset på dygnet är " + highestPrice + " och infaller kl " + timeAtHighest);
         System.out.println("Det lägsta priset på dygnet är " + lowestPrice + " och infaller kl " + timeAtLowest);
         System.out.println("Medel priset var " + averagePrice + " kr under dygnet.");
@@ -140,7 +148,9 @@ public class Labboration1 {
         for (int i = 0; i < 24; i++) {
             averagePriceHelper = averagePriceHelper + getPrice(array, i);
         }
+
         int averagePrice = averagePriceHelper / array.length;
+
         return averagePrice;
     }
 
@@ -149,6 +159,7 @@ public class Labboration1 {
 
     private static ElectricData[] sortArray(ElectricData[] array) {
         ElectricData[] sortedArray = Arrays.copyOf(array, 24);
+
         ElectricData priceHelper;
 
         for (int i = 0; i < sortedArray.length; i++) {
