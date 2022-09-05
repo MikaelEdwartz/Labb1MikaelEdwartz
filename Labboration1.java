@@ -28,20 +28,19 @@ public class Labboration1 {
 
             String input = scanner.nextLine();
 
-            switch(input) {
+            switch (input) {
                 case "1" -> autoAddElectricPrices();//inmatning(scanner); för manuell inmatning
                 case "2" -> minMaxMedel(electricPrices);
                 case "3" -> printSortedArray(sortArray(electricPrices));
                 case "4" -> calculateCheapest4Hours();
-                case "5" -> createVG();
+                case "5" -> createAndPrintGraph();
                 case "e" -> loop = false;
-
             }
         }
 
     }
 
-    public static void autoAddElectricPrices(){
+    public static void autoAddElectricPrices() {
         electricPrices = new ElectricData[24];
         for (int i = 0; i < 24; i++) {
 
@@ -62,15 +61,11 @@ public class Labboration1 {
     }
     //printar ut vad priset är mellan de olika klockslagen.
 
-    private static void printPricePerHour() {
-        for (int i = 0; i < electricPrices.length; i++) {
-            System.out.println("Mellan klockan " + printHour(i) + " är priset " + getPrice(electricPrices, i) + " kr per kW/h.");
-        }
-    }
 
     private static int getPrice(ElectricData[] electricPrices, int i) {
         return electricPrices[i].getPrice();
     }
+
     public static void inmatning(Scanner scanner) {
 
         electricPrices = new ElectricData[24];
@@ -90,6 +85,7 @@ public class Labboration1 {
 
         }
     }
+
     //printar ut tiden när användaren frågas efter elpriser under dygnet.
     private static void askPriceAndPrintTime(int i) {
 
@@ -151,48 +147,47 @@ public class Labboration1 {
 
     //Skapar en ny array och sorterar på billigaste priset.
 
-    private static ElectricData[] sortArray(ElectricData[] array){
+    private static ElectricData[] sortArray(ElectricData[] array) {
         ElectricData[] sortedArray = Arrays.copyOf(array, 24);
         ElectricData priceHelper;
 
         for (int i = 0; i < sortedArray.length; i++) {
-            for (int j = 0; j < sortedArray.length-1; j++) {
-                if(getPrice(sortedArray, j) > getPrice(sortedArray, j + 1)){
+            for (int j = 0; j < sortedArray.length - 1; j++) {
+                if (getPrice(sortedArray, j) > getPrice(sortedArray, j + 1)) {
                     priceHelper = sortedArray[j];
-                    sortedArray[j] = sortedArray[j+1];
-                    sortedArray[j+1] = priceHelper;
+                    sortedArray[j] = sortedArray[j + 1];
+                    sortedArray[j + 1] = priceHelper;
 
                 }
             }
         }
 
 
-
         return sortedArray;
     }
     //printar ut den sorterade arrayn med billigaste priset först.
 
-    private static void printSortedArray(ElectricData[] array){
+    private static void printSortedArray(ElectricData[] array) {
         for (int i = 0; i < array.length; i++) {
 
             System.out.println(printHour(array[i].getTime()) + " " + getPrice(array, i) + " öre");
         }
     }
 
-    private static void calculateCheapest4Hours(){
+    private static void calculateCheapest4Hours() {
         int fourHourPrice;
         double helper = Integer.MAX_VALUE;
         int timeToStartCharge = 0;
-        for (int i = 0; i < electricPrices.length-4; i++) {
+        for (int i = 0; i < electricPrices.length - 4; i++) {
             fourHourPrice = getPrice(electricPrices, i) + getPrice(electricPrices, i + 1) + getPrice(electricPrices, i + 2) + getPrice(electricPrices, i + 4);
-            if(fourHourPrice < helper){
+            if (fourHourPrice < helper) {
                 helper = fourHourPrice;
                 timeToStartCharge = electricPrices[i].getTime();
             }
 
         }
 
-        System.out.println("Mellan klockan " + electricPrices[timeToStartCharge].getTime() + " och " + electricPrices[timeToStartCharge+4].getTime() + " är det billigast att ladda. Medelpriset under de fyra timmarna är "+ (helper/4) );
+        System.out.println("Mellan klockan " + electricPrices[timeToStartCharge].getTime() + " och " + electricPrices[timeToStartCharge + 4].getTime() + " är det billigast att ladda. Medelpriset under de fyra timmarna är " + (helper / 4));
     }
 
 
@@ -202,101 +197,88 @@ public class Labboration1 {
 
         if (i < 9)
             return "0" + i + "-0" + timeHelper;
-         else if (i < 10)
+        else if (i < 10)
             return "0" + i + "-" + timeHelper;
-         else
+        else
             return i + "-" + timeHelper;
 
 
     }
 
-    public static String printOneHour(int i){
+    public static String printOneHour(int i) {
 
         if (i < 9)
             return "0" + i;
         else if (i < 10)
             return "0" + i;
         else
-            return String.valueOf(i) ;
+            return String.valueOf(i);
 
 
     }
 
 
-
-
-    public static void createVG(){
+    public static void createAndPrintGraph() {
 
         String[][] visualRep = new String[8][26];
-        visualRep[0][0] = String.valueOf(highestPrice);
-        visualRep[6][0] = String.valueOf(lowestPrice);
-        /*visualRep[0][0] = String.valueOf(1000);
-        visualRep[6][0] = String.valueOf(0);
-*/
-        int test2 = highestPrice/6;
-        int helper = 6;
-
-
-
-        for (int i = 0; i < 6; i++) {
-            for (int j = 2; j < 26; j++) {
-
-               if(electricPrices[j-2].getPrice() >= (test2 * helper)){
-                   visualRep[i][j] = " * ";
-               } else{
-                   visualRep[i][j] = "   ";
-               }
-
-               if(i == 5){
-                   if(electricPrices[j-2].getPrice() >= lowestPrice){
-                       visualRep[i][j] = " * ";
-                   } else{
-                       visualRep[i][j] = "   ";
-                   }
-               }
-
-
-
-            }
-            helper--;
-        }
 
         createGraphBody(visualRep);
         printVisualGraph(visualRep);
 
-
-
-             /* |-----------------------------------------------------------------------
-                |00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-*/
     }
 
     private static void createGraphBody(String[][] visualRep) {
         int numberOfWhiteSpaces = String.valueOf(highestPrice).length();
         int whiteSpaceHelper = String.valueOf(lowestPrice).length();
 
+
+        visualRep[0][0] = String.valueOf(highestPrice);
+        visualRep[6][0] = String.valueOf(lowestPrice);
+
+        createValuesInGraph(visualRep);
+        addVerticalBorderToGraph(visualRep, numberOfWhiteSpaces, whiteSpaceHelper);
+        addHorizontalBorderToGraph(visualRep);
+        addHoursToGraph(visualRep);
+
+
+    }
+
+    private static void addVerticalBorderToGraph(String[][] visualRep, int numberOfWhiteSpaces, int whiteSpaceHelper) {
+        addVerticalWhiteSpaceAndNumberToGraph(visualRep, numberOfWhiteSpaces, whiteSpaceHelper);
+
+        addPipeToVerticalBorder(visualRep);
+    }
+
+    private static void addPipeToVerticalBorder(String[][] visualRep) {
+        for (int i = 0; i < 8; i++) {
+
+            visualRep[i][1] = "|";
+        }
+    }
+
+    private static void addVerticalWhiteSpaceAndNumberToGraph(String[][] visualRep, int numberOfWhiteSpaces, int whiteSpaceHelper) {
         for (int i = 0; i < 8; i++) {
 
             visualRep[i][0] = printWhiteSpaces(numberOfWhiteSpaces);
-            if(i == 0)
+            if (i == 0)
                 visualRep[i][0] = String.valueOf(highestPrice);
 
-            if(i == 5)
+            if (i == 5)
                 visualRep[i][0] = printWhiteSpaces(numberOfWhiteSpaces - whiteSpaceHelper) + lowestPrice;
 
 
         }
+    }
 
-        for (int i = 0; i < 8; i++) {
-
-                visualRep[i][1] = "|";
+    private static void addHorizontalBorderToGraph(String[][] visualRep) {
+        for (int i = 6; i < 7; i++) {
+            for (int j = 2; j < 26; j++) {
+                visualRep[i][j] = "---";
             }
-
-        for (int i = 6; i < 7 ; i++) {
-            for (int j = 2; j < 26 ; j++) {
-                    visualRep[i][j] = "---";
         }
     }
+
+    private static void addHoursToGraph(String[][] visualRep) {
         int k = 2;
         for (int i = 0; i < 24; i++) {
 
@@ -305,8 +287,41 @@ public class Labboration1 {
             k++;
 
         }
+    }
+
+    private static void createValuesInGraph(String[][] visualRep) {
+        double priceCheck = (double) highestPrice / 6;
+        int divisionHelper = 6;
+
+        for (int i = 0; i < 6; i++) {
+            for (int j = 2; j < 26; j++) {
+
+                addPriceToGraph(visualRep, priceCheck, divisionHelper, i, j);
+
+                printPriceIfLastRow(visualRep, i, j);
 
 
+            }
+            divisionHelper--;
+        }
+    }
+
+    private static void addPriceToGraph(String[][] visualRep, double priceCheck, int divisionHelper, int i, int j) {
+        if (electricPrices[j - 2].getPrice() >= (priceCheck * divisionHelper)) {
+            visualRep[i][j] = " * ";
+        } else {
+            visualRep[i][j] = "   ";
+        }
+    }
+
+    private static void printPriceIfLastRow(String[][] visualRep, int i, int j) {
+        if (i == 5) {
+            if (electricPrices[j - 2].getPrice() >= lowestPrice) {
+                visualRep[i][j] = " * ";
+            } else {
+                visualRep[i][j] = "   ";
+            }
+        }
     }
 
     private static void printVisualGraph(String[][] visualRep) {
@@ -320,46 +335,11 @@ public class Labboration1 {
 
     private static String printWhiteSpaces(int numberOfWhiteSpaces) {
         String whiteSpaces = "";
-    for (int j = 0; j < numberOfWhiteSpaces; j++) {
+        for (int j = 0; j < numberOfWhiteSpaces; j++) {
             whiteSpaces = whiteSpaces + " ";
         }
-    return whiteSpaces;
+        return whiteSpaces;
     }
-
-    public static void printVG(){
-
-
-
-
-
-
-
-
-
-    }
-
-    /*
-
-     530|                        x                          x  x
-        |               x x         x x x x
-        |               x x x x x x   x x   x x x         x x x
-        |               x x x x x x x x x x x x x x x
-        |        x x x x x      x x x x x x x x x x x x x x x x x x
-      40|            x x x x x x x       x x x x x x x x x x x x x x x x x
-        |-----------------------------------------------------------------------
-        |00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-
-*/
-
-
-
 
 
 }
-
-/*¨
-* loopa genom array med electricdata objekt
-* electriddataarray[i] är billigare än
-*
-* */
-
