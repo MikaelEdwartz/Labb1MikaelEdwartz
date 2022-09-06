@@ -26,14 +26,14 @@ public class Labboration1 {
             greeting();
             String input = scanner.nextLine();
 
-            loop = menuOptions(loop, input);
+            loop = menuOptions(loop, input, scanner);
         }
 
     }
 
-    private static boolean menuOptions(boolean loop, String input) {
+    private static boolean menuOptions(boolean loop, String input,Scanner scanner) {
         switch (input) {
-            case "1" -> autoAddElectricPrices();  //inmatning(scanner); för manuell inmatning
+            case "1" -> inputPricesToArray(scanner);// för manuell inmatning autoAddElectricPrices();
             case "2" -> printHighestLowestAndAverage(electricPrices);
             case "3" -> printSortedArray(sortArray(electricPrices));
             case "4" -> calculateCheapest4Hours();
@@ -136,9 +136,9 @@ public class Labboration1 {
 
     //printar ut vilket pris som var högst, lägst samt medelpriset under dygnet, vilka timmar som de inträffar på.
     private static void printHighestLowestAverage(int highestPrice, int timeAtHighest, int timeAtLowest, int averagePrice) {
-        System.out.println("Det högsta priset på dygnet är " + highestPrice + " och infaller kl " + timeAtHighest);
-        System.out.println("Det lägsta priset på dygnet är " + lowestPrice + " och infaller kl " + timeAtLowest);
-        System.out.println("Medel priset var " + averagePrice + " kr under dygnet.");
+        System.out.println("Det högsta priset på dygnet infaller mellan kl " + printHour(timeAtHighest) + " och då är priset " + highestPrice + " öre");
+        System.out.println("Det högsta priset på dygnet infaller mellan kl " + printHour(timeAtLowest) + " och då är priset " + lowestPrice + " öre");
+        System.out.println("Medel priset var " + averagePrice + " öre under dygnet.");
     }
 
 
@@ -198,7 +198,7 @@ public class Labboration1 {
 
         }
 
-        System.out.println("Mellan klockan " + electricPrices[timeToStartCharge].getTime() + " och " + electricPrices[timeToStartCharge + 4].getTime() + " är det billigast att ladda. Medelpriset under de fyra timmarna är " + (helper / 4));
+        System.out.println("Mellan klockan " + printOneHour(timeToStartCharge) + " och " + printOneHour(timeToStartCharge + 4) + " är det billigast att ladda. Medelpriset under de fyra timmarna är " + (helper / 4) + " öre per timme");
     }
 
 
