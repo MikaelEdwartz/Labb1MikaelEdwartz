@@ -15,7 +15,6 @@ public class Labb1MikaelEdwartz {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         start(scanner);
-
     }
 
     public static void start(Scanner scanner) {
@@ -24,12 +23,11 @@ public class Labb1MikaelEdwartz {
         while (loop) {
             printMenu();
             String input = scanner.nextLine();
-            loop = menuOptions(loop, input);
+            loop = menuOptions(loop, input, scanner);
         }
-
     }
 
-    private static boolean menuOptions(boolean loop, String input) {
+    private static boolean menuOptions(boolean loop, String input, Scanner scanner) {
         switch (input) {
             case "1" -> autoAddElectricPrices();//addPricesToArray(scanner);
             case "2" -> printHighestLowestAndAverage();
@@ -243,10 +241,8 @@ public class Labb1MikaelEdwartz {
     }
 
     private static void addBorderToXAxis(String[][] visualRep) {
-        for (int i = 6; i < 7; i++) {
             for (int j = 2; j < 26; j++) {
-                visualRep[i][j] = "---";
-            }
+                visualRep[6][j] = "---";
         }
     }
 
@@ -259,7 +255,7 @@ public class Labb1MikaelEdwartz {
     }
 
     private static void addPriceRepresentationToGraph(String[][] visualRep) {
-        double priceCheck = (double) (highestPrice)/ 6;
+        double priceCheck = (double) (highestPrice) / 6;
         int divisionHelper = 6;
 
         for (int i = 0; i < 6; i++) {
