@@ -35,6 +35,7 @@ public class Labb1MikaelEdwartz {
             case "4" -> calculateCheapest4Hours();
             case "5" -> createAndPrintGraph();
             case "e" -> loop = false;
+            default -> System.out.println("Felaktig inmatning, försök igen");
         }
         return loop;
     }
