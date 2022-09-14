@@ -1,10 +1,10 @@
-package se.iths.labborationer;
+package se.iths.labborationer.labb1;
 
-public class ElectricData {
-    int time;
-    int electricPrice;
+public class ElectricPriceTime {
+    private final int time;
+    private final int electricPrice;
 
-    public ElectricData(int time, int price){
+    public ElectricPriceTime(int time, int price){
         this.time = time;
         this.electricPrice = price;
     }

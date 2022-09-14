@@ -1,11 +1,11 @@
-package se.iths.labborationer;
+package se.iths.labborationer.labb1;
 
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Labb1MikaelEdwartz {
 
-    static ElectricData[] electricPrices = new ElectricData[24];
+    static ElectricPriceTime[] electricPrices = new ElectricPriceTime[24];
     static int timeAtLowest;
     static int timeAtHighest;
     static int lowestPrice = Integer.MAX_VALUE;
@@ -29,7 +29,7 @@ public class Labb1MikaelEdwartz {
 
     private static boolean menuOptions(boolean loop, String input, Scanner scanner) {
         switch (input) {
-            case "1" -> autoAddElectricPrices();//addPricesToArray(scanner);
+            case "1" -> addPricesToArray(scanner); //autoAddElectricPrices();
             case "2" -> printHighestLowestAndAverage();
             case "3" -> printSortedArray(createNewSortedArray());
             case "4" -> calculateCheapest4Hours();
@@ -55,7 +55,7 @@ public class Labb1MikaelEdwartz {
     public static void autoAddElectricPrices() {
         for (int i = 0; i < 24; i++) {
             int priceInput = (int) (Math.random() * 520) + 50;
-            electricPrices[i] = new ElectricData(i, priceInput);
+            electricPrices[i] = new ElectricPriceTime(i, priceInput);
         }
 
         calculateHighestAndLowestPrice(electricPrices);
@@ -71,7 +71,7 @@ public class Labb1MikaelEdwartz {
     private static void setPricesToArray(Scanner scanner, int i) {
         askPriceAndPrintTime(i);
         int priceInput = scanner.nextInt();
-        electricPrices[i] = new ElectricData(i, priceInput);
+        electricPrices[i] = new ElectricPriceTime(i, priceInput);
     }
 
     private static void askPriceAndPrintTime(int i) {
@@ -79,7 +79,7 @@ public class Labb1MikaelEdwartz {
 
     }
 
-    private static void calculateAveragePricePerDay(ElectricData[] array) {
+    private static void calculateAveragePricePerDay(ElectricPriceTime[] array) {
         int averagePriceHelper = 0;
 
         for (int i = 0; i < 24; i++) {
@@ -88,14 +88,14 @@ public class Labb1MikaelEdwartz {
         averagePrice = averagePriceHelper / array.length;
     }
 
-    private static void calculateHighestAndLowestPrice(ElectricData[] array) {
+    private static void calculateHighestAndLowestPrice(ElectricPriceTime[] array) {
         calculateHighestPricePerDay(array);
         calculateLowestPricePerDay(array);
         calculateAveragePricePerDay(array);
 
     }
 
-    private static void calculateLowestPricePerDay(ElectricData[] array) {
+    private static void calculateLowestPricePerDay(ElectricPriceTime[] array) {
         for (int i = 0; i < array.length; i++) {
             if (returnSpecificPrice(array, i) < lowestPrice) {
                 lowestPrice = returnSpecificPrice(array, i);
@@ -104,7 +104,7 @@ public class Labb1MikaelEdwartz {
         }
     }
 
-    private static void calculateHighestPricePerDay(ElectricData[] array) {
+    private static void calculateHighestPricePerDay(ElectricPriceTime[] array) {
         for (int i = 0; i < array.length; i++) {
             if (returnSpecificPrice(array, i) > highestPrice) {
                 highestPrice = returnSpecificPrice(array, i);
@@ -113,7 +113,7 @@ public class Labb1MikaelEdwartz {
         }
     }
 
-    private static int returnSpecificPrice(ElectricData[] electricPrices, int i) {
+    private static int returnSpecificPrice(ElectricPriceTime[] electricPrices, int i) {
         return electricPrices[i].getPrice();
     }
 
@@ -124,14 +124,14 @@ public class Labb1MikaelEdwartz {
     }
 
 
-    private static ElectricData[] createNewSortedArray() {
-        ElectricData[] sortedArray = Arrays.copyOf(electricPrices, 24);
+    private static ElectricPriceTime[] createNewSortedArray() {
+        ElectricPriceTime[] sortedArray = Arrays.copyOf(electricPrices, 24);
         bubbleSortLowestPriceToHighest(sortedArray);
         return sortedArray;
     }
 
-    private static void bubbleSortLowestPriceToHighest(ElectricData[] sortedArray) {
-        ElectricData priceHelper;
+    private static void bubbleSortLowestPriceToHighest(ElectricPriceTime[] sortedArray) {
+        ElectricPriceTime priceHelper;
 
         for (int i = 0; i < sortedArray.length; i++) {
             for (int j = 0; j < sortedArray.length - 1; j++) {
@@ -146,7 +146,7 @@ public class Labb1MikaelEdwartz {
         }
     }
 
-    private static void printSortedArray(ElectricData[] array) {
+    private static void printSortedArray(ElectricPriceTime[] array) {
         for (int i = 0; i < array.length; i++) {
             System.out.println((i + 1) + ". Mellan kl " + printTimeIntervalInCorrectFormat(array[i].getTime()) + " var priset " + returnSpecificPrice(array, i) + " öre");
         }
