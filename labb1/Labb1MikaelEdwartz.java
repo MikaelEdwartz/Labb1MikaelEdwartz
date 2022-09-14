@@ -29,7 +29,7 @@ public class Labb1MikaelEdwartz {
 
     private static boolean menuOptions(boolean loop, String input, Scanner scanner) {
         switch (input) {
-            case "1" -> addPricesToArray(scanner); //autoAddElectricPrices();
+            case "1" -> autoAddElectricPrices();//addPricesToArray(scanner);
             case "2" -> printHighestLowestAndAverage();
             case "3" -> printSortedArray(createNewSortedArray());
             case "4" -> calculateCheapest4Hours();
@@ -144,6 +144,8 @@ public class Labb1MikaelEdwartz {
                 }
             }
         }
+
+
     }
 
     private static void printSortedArray(ElectricPriceTime[] array) {
