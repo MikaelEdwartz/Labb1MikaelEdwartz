@@ -1,3 +1,4 @@
+
 package se.iths.labborationer.labb1;
 
 public class ElectricPriceTime {

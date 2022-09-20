@@ -1,5 +1,4 @@
 package se.iths.labborationer.labb1;
-
 import java.util.Arrays;
 import java.util.Scanner;
 
