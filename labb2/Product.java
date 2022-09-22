@@ -1,16 +1,20 @@
 package se.iths.labborationer.labb2;
 
-public abstract class Product {
+public class Product {
+    private final ProductCategory category;
     private final String product;
-    private final float price;
+    private final int price;
     private final int productNumber;
 
-
-    public Product(String product, float price, int productNumber){
+    public Product(ProductCategory category, String product, int price, int productNumber) {
+        this.category = category;
         this.product = product;
         this.price = price;
         this.productNumber = productNumber;
+    }
 
+    public ProductCategory getCategory() {
+        return category;
     }
 
     public String getProduct() {
@@ -23,5 +27,14 @@ public abstract class Product {
 
     public int getProductNumber() {
         return productNumber;
+    }
+
+    @Override
+    public String toString() {
+        return
+                "category=" + category +
+                ", product=" + product +
+                ", price=" + price +
+                ", productNumber=" + productNumber;
     }
 }
