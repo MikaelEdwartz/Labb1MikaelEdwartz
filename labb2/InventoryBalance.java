@@ -15,11 +15,38 @@ public class InventoryBalance {
 
     }
 
-    public void printBalance(){
-        for (int i = 0; i < this.inventory.size(); i++) {
+    public ArrayList<String> getAllCategories(){
+        ArrayList<String> list = new ArrayList<>();
 
-            System.out.println(this.inventory.get(i));
+        for (int i = 0; i < this.inventory.size(); i++) {
+            String category = String.valueOf(this.inventory.get(i).category());
+
+            if (!(list.contains(category)))
+                list.add(category);
         }
 
+        return list;
+    }
+
+    public void printBalance(){
+        for (int i = 0; i < inventory.size(); i++) {
+
+            System.out.println(inventory.get(i));
+        }
+
+
+
+
+    }
+
+    @Override
+    public String toString() {
+        return "InventoryBalance{" +
+                "inventory=" + inventory +
+                '}';
+    }
+
+    public int size() {
+        return inventory.size();
     }
 }
