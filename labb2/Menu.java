@@ -26,6 +26,7 @@ public class Menu {
 
             while(loop){
                     String input = scanner.nextLine();
+
                 switch(input){
                 case "1" -> createNewCategory();
                 case "2" -> printAddProductToCategory();
@@ -60,6 +61,9 @@ public class Menu {
 
     }
 
+    public void createNewCategory() {
+
+    }
 
     public void searchByCategory() {
 
@@ -73,9 +77,6 @@ public class Menu {
 
     }
 
-    public void createNewCategory() {
-
-    }
 
     public void startupkategorier() {
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", 5, 10938));
