@@ -9,25 +9,23 @@ public class Menu {
     public Menu(InventoryBalance balance, Scanner scanner) {
         this.balance = balance;
         this.scanner = scanner;
+
+
+        startupkategorier();
     }
 
     public void start(){
-        String input = scanner.nextLine();
         boolean loop = true;
 
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", 5, 10938));
-        this.balance.add(new Product(new ProductCategory("D"), "Mil", 5, 10938));
-        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", 5, 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", 5, 10938));
 
-        System.out.println("Menu");
+        System.out.println("Meny");
+
+            greeting();
 
 
-            System.out.println();
-
-            printAddProductToCategory();
 
             while(loop){
+                    String input = scanner.nextLine();
                 switch(input){
                 case "1" -> createNewCategory();
                 case "2" -> printAddProductToCategory();
@@ -41,15 +39,15 @@ public class Menu {
     }
 
     public void greeting(){
+
         System.out.println("Hej och välkommen till Kortedala mataffär");
-        System.out.println("Skapa ny kategori");
-        System.out.println("lägg till vara");
-        System.out.println("Läg");
-        System.out.println("printa ut lagersaldo");
-        System.out.println("sök via kategori");
-        System.out.println("sök inom ett prisintervall");
-        System.out.println("Sök efter varor");
-        System.out.println("Avsluta");
+        System.out.println("1: Skapa ny kategori");
+        System.out.println("2: Lägg till vara");
+        System.out.println("3: Printa ut lagersaldo");
+        System.out.println("4: Sök via kategori");
+        System.out.println("5: Sök inom ett prisintervall");
+        System.out.println("e: Avsluta");
+
     }
 
     public void printAddProductToCategory(){
@@ -60,6 +58,33 @@ public class Menu {
 
         }
 
+    }
+
+
+    public void searchByCategory() {
+
+    }
+
+
+    public void printInventoryBalance() {
+    }
+
+    public void searchBetweenPrices() {
+
+    }
+
+    public void createNewCategory() {
+
+    }
+
+    public void startupkategorier() {
+        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", 5, 10938));
+        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", 9, 10938));
+        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", 25, 10938));
+        this.balance.add(new Product(new ProductCategory("Meat"), "Beef", 51, 10938));
+        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", 54, 10938));
+        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", 25, 10938));
+        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", 15, 10938));
     }
 }
 
