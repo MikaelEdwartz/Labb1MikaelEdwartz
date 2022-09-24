@@ -1,4 +1,6 @@
 package se.iths.labborationer.labb1;
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -23,6 +25,7 @@ public class Labb1MikaelEdwartz {
             printMenu();
             String input = scanner.nextLine();
             loop = menuOptions(loop, input, scanner);
+            
         }
     }
 
@@ -38,6 +41,9 @@ public class Labb1MikaelEdwartz {
         }
         return loop;
     }
+
+
+
 
     private static void printMenu() {
         System.out.println("Elpriser\n" +

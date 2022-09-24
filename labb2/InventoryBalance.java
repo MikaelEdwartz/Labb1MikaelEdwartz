@@ -16,7 +16,7 @@ public class InventoryBalance {
     }
 
     public ArrayList<String> getAllCategories(){
-        ArrayList<String> list = new ArrayList<>();
+        var list = new ArrayList<String>();
 
         for (int i = 0; i < this.inventory.size(); i++) {
             String category = String.valueOf(this.inventory.get(i).category());
@@ -33,8 +33,6 @@ public class InventoryBalance {
 
             System.out.println(inventory.get(i));
         }
-
-
 
 
     }
