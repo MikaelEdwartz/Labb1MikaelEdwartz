@@ -14,9 +14,9 @@ public class Main {
 
     }
 }
-//TODO Kunna skapa kategorier
-//TODO Kunna skapa produkter
-//TODO Lägga till produkter i ArrayList
+//TODO Kunna skapa kategorier                                               J
+//TODO Kunna skapa produkter                                                J
+//TODO Lägga till produkter i ArrayList                                     J
 //TODO Ändra pris på produkt??
 //TODO Hålla koll på hur många av en specifik vara som finns i lager
 //TODO

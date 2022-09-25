@@ -15,6 +15,20 @@ public class InventoryBalance {
 
     }
 
+
+    public ArrayList<Product> getInventory() {
+        return inventory;
+    }
+
+    public Product getProduct(int i){
+        return this.inventory.get(i);
+    }
+    public ProductCategory getCategory(int i){
+        return this.inventory.get(i).category();
+    }
+    public String getProductName(int i){
+        return this.inventory.get(i).product();
+    }
     public ArrayList<String> getAllCategories(){
         var list = new ArrayList<String>();
 
