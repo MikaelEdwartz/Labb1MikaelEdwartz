@@ -17,9 +17,6 @@ public class Menu {
         this.balance = balance;
         this.categories = categories;
         this.scanner = scanner;
-
-
-
     }
 
     public void start() {
@@ -27,12 +24,23 @@ public class Menu {
         greeting();
 
 
+        while(loop){
+            var input = scanner.next();
+            switch(input){
+                case "1" -> ;
+            }
+        }
+        adminMenu(loop);
+
+    }
+
+    private void adminMenu(boolean loop) {
         while (loop) {
-            var input = scanner.nextLine();
+            var input = scanner.next();
 
             switch (input) {
-                case "1" -> addProductToInventoryBalance(); //skapar kategoriuserCategoryChoice()
-                case "2" -> removeProduct();//printAddProductToCategory();
+                case "1" -> addProductToInventoryBalance(addProductsAndCategories());
+                case "2" -> removeProduct();
                 case "3" -> printInventoryBalance();
                 case "4" -> searchByCategory();
                 case "5" -> searchBetweenPrices();
@@ -40,8 +48,8 @@ public class Menu {
             }
             greeting();
         }
-
     }
+
 //Första menyn "Admin eller kund"
 
 
@@ -57,10 +65,8 @@ public class Menu {
 
     }
 
-    public void addProductToInventoryBalance() {
-        startupkategorier();
-        //ProductCategory category
-        //this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
+    public void addProductToInventoryBalance(ProductCategory category) {
+        this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
     }
 
     private int getProductSerialCode() {
@@ -75,12 +81,12 @@ public class Menu {
 
     private String getProductName() {
         System.out.println("Vänligen skriv in namn på varan");
-        return scanner.nextLine();
+        return scanner.next();
     }
 
     public void createNewCategory(Scanner scanner) {
         System.out.println("Vänligen skriv in namn på ny kategori.");
-        this.categories.add(new ProductCategory(scanner.nextLine()));
+        this.categories.add(new ProductCategory(scanner.next()));
 
     }
 
@@ -90,13 +96,14 @@ public class Menu {
 
         while (true) {
 
-            int userChoice = Integer.parseInt(scanner.nextLine());
+            int userChoice = Integer.parseInt(scanner.next());
 
             if (userChoice == 1)
                 createNewCategory(scanner);
             else
                 return this.categories.get(userChoice - 2);
             listCategoriesToAdd();
+
         }
 
     }
@@ -125,8 +132,10 @@ public class Menu {
 
     private void removeProduct() {
         System.out.println("Välj vilken kategori du vill radera en vara från.");
+
         var category = userCategoryChoice();
         var tempList = new ArrayList<Integer>();
+
         int count = 1;
         for (int i = 0; i < this.balance.size(); i++) {
             if (categoryMatch(category, i)) {
@@ -139,6 +148,8 @@ public class Menu {
 
         int productToRemove = scanner.nextInt();
         this.balance.remove(tempList.get(productToRemove-1));
+
+
 
     }
 
@@ -188,9 +199,11 @@ public class Menu {
 
 
     public void startupkategorier() {
+
         for (int i = 0; i < this.balance.size(); i++) {
             this.categories.add(this.balance.getCategory(i));
         }
+
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
         this.balance.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
         this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 10938));
