@@ -5,7 +5,6 @@ package se.iths.labborationer.labb2;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 import static java.math.BigDecimal.*;
 
@@ -20,22 +19,21 @@ public class Menu {
         this.scanner = scanner;
 
 
-        startupkategorier();
+
     }
 
     public void start() {
         boolean loop = true;
         greeting();
-        startupkategorier();
 
 
         while (loop) {
             var input = scanner.nextLine();
 
             switch (input) {
-                case "1" -> addProductToInventoryBalance(userCategoryChoice()); //skapar kategori
+                case "1" -> addProductToInventoryBalance(); //skapar kategoriuserCategoryChoice()
                 case "2" -> removeProduct();//printAddProductToCategory();
-                case "3" -> this.balance.printBalance();
+                case "3" -> printInventoryBalance();
                 case "4" -> searchByCategory();
                 case "5" -> searchBetweenPrices();
                 case "e" -> loop = false;
@@ -44,6 +42,7 @@ public class Menu {
         }
 
     }
+//Första menyn "Admin eller kund"
 
 
     public void greeting() {
@@ -58,8 +57,10 @@ public class Menu {
 
     }
 
-    public void addProductToInventoryBalance(ProductCategory category) {
-        this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
+    public void addProductToInventoryBalance() {
+        startupkategorier();
+        //ProductCategory category
+        //this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
     }
 
     private int getProductSerialCode() {
@@ -83,7 +84,7 @@ public class Menu {
 
     }
 
-    public ProductCategory userCategoryChoice() {
+    public ProductCategory addProductsAndCategories() {
         addFirstCategory();
         listCategoriesToAdd();
 
@@ -122,80 +123,85 @@ public class Menu {
         }
     }
 
-    /*¨
-    * Radering ska vi ha varor med olika streckkoder
-    * Ska vi kunna ha olika priser på varorna?
-    * Ska vi radera utifrån namn, eller andra kriterier
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    * */
-
     private void removeProduct() {
-        int productToRemove = 1;
-        int productToRemove1;
-        var chosenProduct = listCategoriesttoRemove();
-        var tempList = new ArrayList<Product>();
+        System.out.println("Välj vilken kategori du vill radera en vara från.");
+        var category = userCategoryChoice();
+        var tempList = new ArrayList<Integer>();
+        int count = 1;
         for (int i = 0; i < this.balance.size(); i++) {
-            if (this.balance.getCategory(i).equals(chosenProduct)) {
-                tempList.add(this.balance.getProduct(i));
+            if (categoryMatch(category, i)) {
+                System.out.println(count + " " + this.balance.printBalance(i));
+                tempList.add(i);
+                count++;
             }
         }
-        for (int i = 0; i < tempList.size(); i++) {
-            System.out.println(productToRemove + this.balance.getProduct(i).product() + " med streckod: " + this.balance.getProduct(i).productNumber());
-        }
+        System.out.println("Välj vilken vara du vill ta bort från lagret");
+
+        int productToRemove = scanner.nextInt();
+        this.balance.remove(tempList.get(productToRemove-1));
 
     }
 
-    private ProductCategory listCategoriesttoRemove() {
-        System.out.println("Välj vilken kategori du vill radera en vara från.");
+    private boolean categoryMatch(ProductCategory category, int i) {
+        return this.balance.getCategory(i).equals(category);
+    }
+
+    public void searchByCategory() {
+        var category = userCategoryChoice();
+        for (int i = 0; i < this.balance.size(); i++) {
+            if(categoryMatch(category, i))
+                System.out.println(this.balance.printBalance(i));
+        }
+    }
+
+    private ProductCategory userCategoryChoice() {
 
         for (int i = 0; i < this.categories.size(); i++) {
             System.out.println((i + 1) + " " + getCategoryAtIndex(i));
-
         }
 
         return this.categories.get(scanner.nextInt() - 1);
     }
 
-    public void searchByCategory() {
-
-    }
 
 
     public void printInventoryBalance() {
-
+        for (int i = 0; i < this.balance.size(); i++) {
+            System.out.println(this.balance.printBalance(i));
+        }
 
     }
 
     public void searchBetweenPrices() {
+        System.out.println("Vad är det lägsta priset");
+        var lowestPrice = scanner.nextBigDecimal();
+        System.out.println("Vad är det högsta priset");
+        var highestPrice = scanner.nextBigDecimal();
 
+        for (int i = 0; i < this.balance.size(); i++) {
+            if(this.balance.getProduct(i).price().compareTo(lowestPrice) >= 0 && (this.balance.getProduct(i).price().compareTo(highestPrice) <= 0)) {
+                System.out.println(this.balance.printBalance(i));
+            }
+
+        }
     }
 
 
     public void startupkategorier() {
+        for (int i = 0; i < this.balance.size(); i++) {
+            this.categories.add(this.balance.getCategory(i));
+        }
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(11), 10938));
+        this.balance.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
         this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 10938));
         this.balance.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10938));
         this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 10938));
         this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 10938));
         this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 10938));
+
+
+        }
     }
-}
+
+
 

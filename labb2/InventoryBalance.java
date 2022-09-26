@@ -15,7 +15,13 @@ public class InventoryBalance {
 
     }
 
+    public void remove(int i){
+        this.inventory.remove(this.getProduct(i));
+    }
 
+    public int getSerialCode(int i ){
+        return this.inventory.get(i).productNumber();
+    }
     public ArrayList<Product> getInventory() {
         return inventory;
     }
@@ -29,6 +35,7 @@ public class InventoryBalance {
     public String getProductName(int i){
         return this.inventory.get(i).product();
     }
+
     public ArrayList<String> getAllCategories(){
         var list = new ArrayList<String>();
 
@@ -42,20 +49,8 @@ public class InventoryBalance {
         return list;
     }
 
-    public void printBalance(){
-        for (int i = 0; i < inventory.size(); i++) {
-
-            System.out.println(inventory.get(i));
-        }
-
-
-    }
-
-    @Override
-    public String toString() {
-        return "InventoryBalance{" +
-                "inventory=" + inventory +
-                '}';
+    public String printBalance(int i) {
+        return this.inventory.get(i).category() + ", " + this.inventory.get(i).product() + ", "  + this.inventory.get(i).price() +   ", " + this.inventory.get(i).productNumber();
     }
 
     public int size() {
