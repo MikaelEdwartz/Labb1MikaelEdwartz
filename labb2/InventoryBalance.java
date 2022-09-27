@@ -1,6 +1,7 @@
 package se.iths.labborationer.labb2;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class InventoryBalance {
     private ArrayList<Product> inventory;
@@ -47,6 +48,19 @@ public class InventoryBalance {
         }
 
         return list;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InventoryBalance that = (InventoryBalance) o;
+        return Objects.equals(inventory, that.inventory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(inventory);
     }
 
     public String printBalance(int i) {

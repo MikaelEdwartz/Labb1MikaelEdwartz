@@ -21,39 +21,63 @@ public class Menu {
 
     public void start() {
         boolean loop = true;
-        greeting();
+        startUpGreeting();
+        startUpMenu(loop);
 
+    }
 
+    private void startUpMenu(boolean loop) {
         while(loop){
             var input = scanner.next();
             switch(input){
-                case "1" -> ;
+                case "1" -> adminMenu(loop);
+                case "2" -> customerMenu(loop);
+                case "e" -> loop = false;
             }
         }
-        adminMenu(loop);
+    }
+
+    private void customerMenu(boolean loop) {
+
+        while(loop){
+            var input = scanner.next();
+
+            switch(input){
+                case "1" -> loopThroughCategories();
+                case "2" ->
+            }
+        }
+
 
     }
 
     private void adminMenu(boolean loop) {
         while (loop) {
-            var input = scanner.next();
+            var input = scanner.nextLine();
 
             switch (input) {
-                case "1" -> addProductToInventoryBalance(addProductsAndCategories());
+                case "1" -> startupkategorier();//addProductToInventoryBalance(addProductsAndCategories());
                 case "2" -> removeProduct();
                 case "3" -> printInventoryBalance();
                 case "4" -> searchByCategory();
                 case "5" -> searchBetweenPrices();
                 case "e" -> loop = false;
             }
-            greeting();
+            adminMenuGreeting();
         }
     }
 
-//Första menyn "Admin eller kund"
-
-
-    public void greeting() {
+    private void startUpGreeting() {
+        System.out.println("Tryck 1 för admin meny");
+        System.out.println("Tryck 2 för kund meny");
+        System.out.println("Tryck e för att avsluta.");
+    }
+    private void costumerMenuGreeting(){
+        System.out.println("1. Vill gå igenom alla kategorier en i taget?");
+        System.out.println("2. Välj en specifik kategori");
+        System.out.println("e. Gå till kassan och betala");
+    }
+    private void adminMenuGreeting() {
         System.out.println("-----------------------------------------");
         System.out.println("Hej och välkommen till Kortedala mataffär");
         System.out.println("1: Lägg till vara/skapa kategori");
@@ -67,21 +91,6 @@ public class Menu {
 
     public void addProductToInventoryBalance(ProductCategory category) {
         this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
-    }
-
-    private int getProductSerialCode() {
-        System.out.println("Vänligen skriv in streckkod på varan.");
-        return scanner.nextInt();
-    }
-
-    private BigDecimal getProductPrice() {
-        System.out.println("Vänligen skriv in pris på varan.");
-        return scanner.nextBigDecimal();
-    }
-
-    private String getProductName() {
-        System.out.println("Vänligen skriv in namn på varan");
-        return scanner.next();
     }
 
     public void createNewCategory(Scanner scanner) {
@@ -102,6 +111,7 @@ public class Menu {
                 createNewCategory(scanner);
             else
                 return this.categories.get(userChoice - 2);
+
             listCategoriesToAdd();
 
         }
@@ -128,6 +138,21 @@ public class Menu {
                 System.out.println((i + 2) + ". " + getCategoryAtIndex(i) + ".");
             }
         }
+    }
+
+    private int getProductSerialCode() {
+        System.out.println("Vänligen skriv in streckkod på varan.");
+        return scanner.nextInt();
+    }
+
+    private BigDecimal getProductPrice() {
+        System.out.println("Vänligen skriv in pris på varan.");
+        return scanner.nextBigDecimal();
+    }
+
+    private String getProductName() {
+        System.out.println("Vänligen skriv in namn på varan");
+        return scanner.next();
     }
 
     private void removeProduct() {
@@ -200,9 +225,7 @@ public class Menu {
 
     public void startupkategorier() {
 
-        for (int i = 0; i < this.balance.size(); i++) {
-            this.categories.add(this.balance.getCategory(i));
-        }
+
 
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
         this.balance.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
@@ -212,6 +235,11 @@ public class Menu {
         this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 10938));
         this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 10938));
 
+        for (int i = 0; i < this.balance.size(); i++) {
+            if(!(this.categories.contains(this.balance.getCategory(i))))
+                this.categories.add(this.balance.getCategory(i));
+
+        }
 
         }
     }
