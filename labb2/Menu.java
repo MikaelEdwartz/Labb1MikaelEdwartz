@@ -2,6 +2,7 @@ package se.iths.labborationer.labb2;
 
 //TODO
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -44,11 +45,19 @@ public class Menu {
 
             switch(input){
                 case "1" -> loopThroughCategories();
-                case "2" ->
+                case "2" -> listProductCategory();
             }
         }
+    }
 
+    private void listProductCategory() {
 
+        var category = getUserCategoryChoice(1);
+        
+
+    }
+
+    private void loopThroughCategories() {
     }
 
     private void adminMenu(boolean loop) {
@@ -57,7 +66,7 @@ public class Menu {
 
             switch (input) {
                 case "1" -> startupkategorier();//addProductToInventoryBalance(addProductsAndCategories());
-                case "2" -> removeProduct();
+                case "2" -> this.balance.printBalance();//removeProduct();
                 case "3" -> printInventoryBalance();
                 case "4" -> searchByCategory();
                 case "5" -> searchBetweenPrices();
@@ -133,13 +142,10 @@ public class Menu {
 
         System.out.println("1. Lägg till ytterligare kategori");
 
-        if (this.categories.size() >= 1) {
-            for (int i = 0; i < this.categories.size(); i++) {
-                System.out.println((i + 2) + ". " + getCategoryAtIndex(i) + ".");
-            }
-        }
+        printCategoriesInOrder(2);
     }
 
+    
     private int getProductSerialCode() {
         System.out.println("Vänligen skriv in streckkod på varan.");
         return scanner.nextInt();
@@ -157,10 +163,18 @@ public class Menu {
 
     private void removeProduct() {
         System.out.println("Välj vilken kategori du vill radera en vara från.");
+        
+        ArrayList<Integer> tempList = getProductIndexes();
+        System.out.println("Välj vilken vara du vill ta bort från lagret");
+        
+        int productToRemove = scanner.nextInt();
+        this.balance.remove(tempList.get(productToRemove-1));
+        
+    }
 
-        var category = userCategoryChoice();
+    private ArrayList<Integer> getProductIndexes() {
+        var category = getUserCategoryChoice(1);
         var tempList = new ArrayList<Integer>();
-
         int count = 1;
         for (int i = 0; i < this.balance.size(); i++) {
             if (categoryMatch(category, i)) {
@@ -169,35 +183,50 @@ public class Menu {
                 count++;
             }
         }
-        System.out.println("Välj vilken vara du vill ta bort från lagret");
-
-        int productToRemove = scanner.nextInt();
-        this.balance.remove(tempList.get(productToRemove-1));
-
-
-
+        return tempList;
     }
+
+    private ArrayList<Product> addCategoryProductsToList() {
+        var category = getUserCategoryChoice(1);
+        var tempList = new ArrayList<Product>();
+        int count = 1;
+        for (int i = 0; i < this.balance.size(); i++) {
+            if (categoryMatch(category, i)) {
+                System.out.println(count + " " + this.balance.printBalance(i));
+                tempList.add(this.balance.getProduct(i));
+                count++;
+            }
+        }
+        return tempList;
+    }
+
 
     private boolean categoryMatch(ProductCategory category, int i) {
         return this.balance.getCategory(i).equals(category);
     }
 
     public void searchByCategory() {
-        var category = userCategoryChoice();
+        var category = getUserCategoryChoice(2);
         for (int i = 0; i < this.balance.size(); i++) {
             if(categoryMatch(category, i))
                 System.out.println(this.balance.printBalance(i));
         }
     }
 
-    private ProductCategory userCategoryChoice() {
-
-        for (int i = 0; i < this.categories.size(); i++) {
-            System.out.println((i + 1) + " " + getCategoryAtIndex(i));
-        }
-
+    private ProductCategory getUserCategoryChoice(int number) {
+        
+        printCategoriesInOrder(number);
         return this.categories.get(scanner.nextInt() - 1);
     }
+    
+    private void printCategoriesInOrder(int number) {
+        if (this.categories.size() >= 1) {
+            for (int i = 0; i < this.categories.size(); i++) {
+                System.out.println((i + number) + ". " + getCategoryAtIndex(i) + ".");
+            }
+        }
+    }
+
 
 
 

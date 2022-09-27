@@ -3,7 +3,7 @@ package se.iths.labborationer.labb2;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class InventoryBalance {
+public class InventoryBalance<T> {
     private ArrayList<Product> inventory;
 
     public InventoryBalance() {
@@ -23,6 +23,7 @@ public class InventoryBalance {
     public int getSerialCode(int i ){
         return this.inventory.get(i).productNumber();
     }
+
     public ArrayList<Product> getInventory() {
         return inventory;
     }
@@ -48,6 +49,10 @@ public class InventoryBalance {
         }
 
         return list;
+    }
+
+    public void printBalance(){
+        this.inventory.forEach(System.out::println);
     }
 
     @Override
