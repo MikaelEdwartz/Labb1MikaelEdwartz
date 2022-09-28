@@ -2,7 +2,6 @@ package se.iths.labborationer.labb2;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Objects;
 
 public class InventoryBalance<T> {
@@ -46,8 +45,15 @@ public class InventoryBalance<T> {
     }
 
     public void printProductWithCategory(ProductCategory category){
-        this.inventory.stream().filter(p -> productMatch(p.category(), category)).forEach(System.out::println);
+        this.inventory.stream()
+                .filter(p -> productMatch(p.category(), category))
+                .forEach(System.out::println);
     }
+
+    public long nrOfProducts(Product number){
+        return this.inventory.stream().filter(product -> product.matchingEanCode(number.productNumber())).count();
+    }
+
 
     public boolean productMatch(ProductCategory p ,ProductCategory o){
         return p.category().equals(o.category());
@@ -56,7 +62,6 @@ public class InventoryBalance<T> {
     public void printBetweenPrices(BigDecimal lowestInputPrice, BigDecimal highestInputPrice){
             BigDecimal lowestPrice = lowestInputPrice;
             BigDecimal highestPrice = highestInputPrice;
-
             this.inventory.stream().filter(p-> p.price()
                             .compareTo(highestPrice) <= 0)
                             .filter(p -> p.price().compareTo(lowestPrice) >= 0)
@@ -66,11 +71,19 @@ public class InventoryBalance<T> {
 
     public void printBalance(){
         this.inventory.forEach(System.out::println);
+
+    }
+
+    public void printbalancetest(){
+        var list = new ArrayList<>(this.inventory);
+
+        list.stream().distinct().forEach(p -> System.out.println(p + " " +  nrOfProducts(p) + " st i lager"));
     }
 
     public String printBalance(int i) {
         return this.inventory.get(i).category() + ", " + this.inventory.get(i).product() + ", "  + this.inventory.get(i).price() +   ", " + this.inventory.get(i).productNumber();
     }
+
     private boolean categoryMatch(ProductCategory category, int i) {
         return this.inventory.get(i).category().equals(category);
     }

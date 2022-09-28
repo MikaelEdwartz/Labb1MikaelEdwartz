@@ -1,6 +1,5 @@
 package se.iths.labborationer.labb2;
 
-//TODO
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -41,11 +40,15 @@ public class Menu {
     private void customerMenu(boolean loop) {
 
         while (loop) {
+            costumerMenuGreeting();
             var input = scanner.next();
 
             switch (input) {
                 case "1" -> loopThroughCategories();
                 case "2" -> listProductCategory();
+                case "3" -> balance.printbalancetest();
+                case "4" -> startupkategorier();
+                case "e" -> loop = false;
             }
         }
     }
@@ -58,6 +61,8 @@ public class Menu {
     }
 
     private void loopThroughCategories() {
+        String input = "categori";
+
     }
 
     private void adminMenu(boolean loop) {
@@ -70,7 +75,7 @@ public class Menu {
                 case "3" -> printInventoryBalance();
                 case "4" -> searchByCategory();
                 case "5" -> searchBetweenPrices();
-                case "e" -> loop = false;
+                case "e" -> this.balance.printbalancetest();
             }
             adminMenuGreeting();
         }
@@ -85,6 +90,7 @@ public class Menu {
     private void costumerMenuGreeting() {
         System.out.println("1. Vill gå igenom alla kategorier en i taget?");
         System.out.println("2. Välj en specifik kategori");
+        System.out.println("3. Printa ut alla produkter");
         System.out.println("e. Gå till kassan och betala");
     }
 
@@ -111,7 +117,9 @@ public class Menu {
     }
 
     public ProductCategory addProductsAndCategories() {
+
         addFirstCategory();
+
         listCategoriesToAdd();
 
         while (true) {
@@ -209,9 +217,7 @@ public class Menu {
 
     public void searchByCategory() {
         var category = getUserCategoryChoice(1);
-
         this.balance.printProductWithCategory(category);
-
     }
 
 
@@ -222,9 +228,13 @@ public class Menu {
 
     private void printCategoriesInOrder(int number) {
         if (this.categories.size() >= 1) {
-            for (int i = 0; i < this.categories.size(); i++) {
-                System.out.println((i + number) + ". " + getCategoryAtIndex(i) + ".");
-            }
+            printCategoriesFormated(number);
+        }
+    }
+
+    private void printCategoriesFormated(int number) {
+        for (int i = 0; i < this.categories.size(); i++) {
+            System.out.println((i + number) + ". " + getCategoryAtIndex(i) + ".");
         }
     }
 
@@ -253,12 +263,22 @@ public class Menu {
 
     public void startupkategorier() {
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
         this.balance.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 10938));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10938));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 10938));
-        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 10938));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 10938));
+        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.balance.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10));
+        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
+        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
+        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
+        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
 
         for (int i = 0; i < this.balance.size(); i++) {
             if (!(this.categories.contains(this.balance.getCategory(i))))
