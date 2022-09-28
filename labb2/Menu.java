@@ -28,9 +28,9 @@ public class Menu {
     }
 
     private void startUpMenu(boolean loop) {
-        while(loop){
+        while (loop) {
             var input = scanner.next();
-            switch(input){
+            switch (input) {
                 case "1" -> adminMenu(loop);
                 case "2" -> customerMenu(loop);
                 case "e" -> loop = false;
@@ -40,10 +40,10 @@ public class Menu {
 
     private void customerMenu(boolean loop) {
 
-        while(loop){
+        while (loop) {
             var input = scanner.next();
 
-            switch(input){
+            switch (input) {
                 case "1" -> loopThroughCategories();
                 case "2" -> listProductCategory();
             }
@@ -53,7 +53,7 @@ public class Menu {
     private void listProductCategory() {
 
         var category = getUserCategoryChoice(1);
-        
+
 
     }
 
@@ -66,7 +66,7 @@ public class Menu {
 
             switch (input) {
                 case "1" -> startupkategorier();//addProductToInventoryBalance(addProductsAndCategories());
-                case "2" -> this.balance.printBalance();//removeProduct();
+                case "2" -> removeProduct();
                 case "3" -> printInventoryBalance();
                 case "4" -> searchByCategory();
                 case "5" -> searchBetweenPrices();
@@ -81,11 +81,13 @@ public class Menu {
         System.out.println("Tryck 2 för kund meny");
         System.out.println("Tryck e för att avsluta.");
     }
-    private void costumerMenuGreeting(){
+
+    private void costumerMenuGreeting() {
         System.out.println("1. Vill gå igenom alla kategorier en i taget?");
         System.out.println("2. Välj en specifik kategori");
         System.out.println("e. Gå till kassan och betala");
     }
+
     private void adminMenuGreeting() {
         System.out.println("-----------------------------------------");
         System.out.println("Hej och välkommen till Kortedala mataffär");
@@ -145,7 +147,7 @@ public class Menu {
         printCategoriesInOrder(2);
     }
 
-    
+
     private int getProductSerialCode() {
         System.out.println("Vänligen skriv in streckkod på varan.");
         return scanner.nextInt();
@@ -163,13 +165,13 @@ public class Menu {
 
     private void removeProduct() {
         System.out.println("Välj vilken kategori du vill radera en vara från.");
-        
+
         ArrayList<Integer> tempList = getProductIndexes();
         System.out.println("Välj vilken vara du vill ta bort från lagret");
-        
+
         int productToRemove = scanner.nextInt();
-        this.balance.remove(tempList.get(productToRemove-1));
-        
+        this.balance.remove(tempList.get(productToRemove - 1));
+
     }
 
     private ArrayList<Integer> getProductIndexes() {
@@ -206,19 +208,18 @@ public class Menu {
     }
 
     public void searchByCategory() {
-        var category = getUserCategoryChoice(2);
-        for (int i = 0; i < this.balance.size(); i++) {
-            if(categoryMatch(category, i))
-                System.out.println(this.balance.printBalance(i));
-        }
+        var category = getUserCategoryChoice(1);
+
+        this.balance.printProductWithCategory(category);
+
     }
 
+
     private ProductCategory getUserCategoryChoice(int number) {
-        
         printCategoriesInOrder(number);
         return this.categories.get(scanner.nextInt() - 1);
     }
-    
+
     private void printCategoriesInOrder(int number) {
         if (this.categories.size() >= 1) {
             for (int i = 0; i < this.categories.size(); i++) {
@@ -228,34 +229,29 @@ public class Menu {
     }
 
 
-
-
     public void printInventoryBalance() {
-        for (int i = 0; i < this.balance.size(); i++) {
-            System.out.println(this.balance.printBalance(i));
-        }
-
+        this.balance.printBalance();
     }
 
     public void searchBetweenPrices() {
-        System.out.println("Vad är det lägsta priset");
-        var lowestPrice = scanner.nextBigDecimal();
-        System.out.println("Vad är det högsta priset");
-        var highestPrice = scanner.nextBigDecimal();
-
-        for (int i = 0; i < this.balance.size(); i++) {
-            if(this.balance.getProduct(i).price().compareTo(lowestPrice) >= 0 && (this.balance.getProduct(i).price().compareTo(highestPrice) <= 0)) {
-                System.out.println(this.balance.printBalance(i));
-            }
-
-        }
+        BigDecimal lowestPrice = getLowestSearchPrice();
+        BigDecimal highestPrice = getHighestSearchPrice();
+        this.balance.printBetweenPrices(lowestPrice, highestPrice);
     }
 
+    private BigDecimal getHighestSearchPrice() {
+        System.out.println("Vad är det högsta priset");
+        var highestPrice = scanner.nextBigDecimal();
+        return highestPrice;
+    }
+
+    private BigDecimal getLowestSearchPrice() {
+        System.out.println("Vad är det lägsta priset");
+        var lowestPrice = scanner.nextBigDecimal();
+        return lowestPrice;
+    }
 
     public void startupkategorier() {
-
-
-
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
         this.balance.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
         this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 10938));
@@ -265,13 +261,11 @@ public class Menu {
         this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 10938));
 
         for (int i = 0; i < this.balance.size(); i++) {
-            if(!(this.categories.contains(this.balance.getCategory(i))))
+            if (!(this.categories.contains(this.balance.getCategory(i))))
                 this.categories.add(this.balance.getCategory(i));
-
-        }
-
         }
     }
+}
 
 
 
