@@ -82,13 +82,11 @@ public class Menu {
         System.out.println("Tryck 2 för kund meny");
         System.out.println("Tryck e för att avsluta.");
     }
-
     private void costumerMenuGreeting(){
         System.out.println("1. Vill gå igenom alla kategorier en i taget?");
         System.out.println("2. Välj en specifik kategori");
         System.out.println("e. Gå till kassan och betala");
     }
-
     private void adminMenuGreeting() {
         System.out.println("-----------------------------------------");
         System.out.println("Hej och välkommen till Kortedala mataffär");
@@ -213,7 +211,7 @@ public class Menu {
         }
 
         this.categories.stream().filter(category -> category != )
-
+                /
     }
 
     private ProductCategory getUserCategoryChoice(int number) {
