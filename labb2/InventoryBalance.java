@@ -2,14 +2,18 @@ package se.iths.labborationer.labb2;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class InventoryBalance<T> {
+public class InventoryBalance {
     private ArrayList<Product> inventory;
 
     public InventoryBalance() {
         this.inventory = new ArrayList<>();
 
+    }
+    public InventoryBalance(ArrayList<Product> list){
+        this.inventory = new ArrayList<>(list);
     }
 
     public void add(Product product){
@@ -77,7 +81,18 @@ public class InventoryBalance<T> {
     public void printbalancetest(){
         var list = new ArrayList<>(this.inventory);
 
-        list.stream().distinct().forEach(p -> System.out.println(p + " " +  nrOfProducts(p) + " st i lager"));
+        list.stream()
+                .distinct()
+                .forEach(p -> System.out.println(p + " " +  nrOfProducts(p) + " st i lager"));
+
+        list.stream().distinct().toList();
+    }
+
+    public ArrayList<Product> getProducts(ArrayList<Product> listIn){
+        List<Product> lists = new ArrayList<>(listIn);
+        lists = lists.stream().distinct().toList();
+        ArrayList<Product> list = new ArrayList<>(lists);
+        return list;
     }
 
     public String printBalance(int i) {

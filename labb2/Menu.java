@@ -1,7 +1,6 @@
 package se.iths.labborationer.labb2;
 
 
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -38,29 +37,38 @@ public class Menu {
     }
 
     private void customerMenu(boolean loop) {
-
+        var register = new Register();
         while (loop) {
 
             costumerMenuGreeting();
             var input = scanner.next();
 
+            System.out.println("====================");
             switch (input) {
                 case "1" -> loopThroughCategories();
-                case "2" -> listProductCategory();
+                case "2" -> listAllProducts(register);
                 case "3" -> balance.printbalancetest();
                 case "4" -> startupkategorier();
                 case "e" -> loop = false;
             }
+            System.out.println("====================");
         }
     }
 
-    private void listProductCategory() {
+    private void listAllProducts(Register register) {
 
-        var category = getUserCategoryChoice(1);
-        this.balance.printProductWithCategory(category);
+        /*var category = getUserCategoryChoice(1);
+        this.balance.printProductWithCategory(category);*/
+        InventoryBalance list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
+        for (int i = 0; i < list.size(); i++) {
 
+            System.out.println((i + 1) + " " + list.getProduct(i) + " " + this.balance.nrOfProducts(list.getProduct(i)));
 
+        }
     }
+
+
+
 
     private void loopThroughCategories() {
         String input = "categori";
@@ -68,6 +76,8 @@ public class Menu {
     }
 
     private void adminMenu(boolean loop) {
+
+
         while (loop) {
             var input = scanner.nextLine();
 
