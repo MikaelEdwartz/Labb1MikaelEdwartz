@@ -40,6 +40,7 @@ public class Menu {
     private void customerMenu(boolean loop) {
 
         while (loop) {
+
             costumerMenuGreeting();
             var input = scanner.next();
 
@@ -56,6 +57,7 @@ public class Menu {
     private void listProductCategory() {
 
         var category = getUserCategoryChoice(1);
+        this.balance.printProductWithCategory(category);
 
 
     }
@@ -72,13 +74,17 @@ public class Menu {
             switch (input) {
                 case "1" -> startupkategorier();//addProductToInventoryBalance(addProductsAndCategories());
                 case "2" -> removeProduct();
-                case "3" -> printInventoryBalance();
+                case "3" -> printProducts();
                 case "4" -> searchByCategory();
                 case "5" -> searchBetweenPrices();
-                case "e" -> this.balance.printbalancetest();
+                case "e" -> loop = false;
             }
             adminMenuGreeting();
         }
+    }
+
+    private void printProducts() {
+        this.balance.printbalancetest();
     }
 
     private void startUpGreeting() {
