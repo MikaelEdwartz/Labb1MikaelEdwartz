@@ -55,6 +55,103 @@ public class Menu {
         }
     }
 
+
+    private void addToRegister(){
+
+
+    }
+
+
+
+
+
+
+
+
+    private void loopThroughCategories() {
+        String input = "categori";
+    }
+    private void listAllProducts(Register register) {
+
+        /*var category = getUserCategoryChoice(1);
+        this.balance.printProductWithCategory(category);*/
+        InventoryBalance list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
+        for (int i = 0; i < list.size(); i++) {
+
+            System.out.println((i + 1) + " " + list.getProduct(i) + " " + actualProductsInStore(list,register, i));
+
+        }
+
+        System.out.println("Skriv in ett nummer för att lägga till produkten i varukorg");
+
+        int choice = scanner.nextInt();
+        System.out.println("Hur många vill du köpa?");
+        long nrOfProducts = scanner.nextInt();
+
+        if(nrOfProducts < this.balance.nrOfProducts(list.getProduct(choice-1))
+                    && this.balance.nrOfProducts(list.getProduct(choice-1)) > 0) {
+            addNrOfProductsToRegister(register, list, choice, nrOfProducts);
+        }
+
+
+
+    }
+
+    private static void addNrOfProductsToRegister(Register register, InventoryBalance list, int choice, long nrOfProducts) {
+        for (int i = 0; i < nrOfProducts; i++) {
+           register.add(list.getProduct(choice - 1));
+        }
+    }
+
+    private int actualProductsInStore(InventoryBalance list, Register register, int i ){
+        int produtsInStore = (int) this.balance.nrOfProducts(list.getProduct(i));
+
+        for (int j = 0; j < register.sameProductsInRegister(list.getProduct(i)) ; j++) {
+            produtsInStore--;
+        }
+        return produtsInStore;
+    }
+
+
+    private void printProducts() {
+        this.balance.printbalancetest();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void adminMenu(boolean loop) {
         while (loop) {
             var input = scanner.nextLine();
@@ -245,27 +342,6 @@ public class Menu {
         System.out.println("Vad är det lägsta priset");
         var lowestPrice = scanner.nextBigDecimal();
         return lowestPrice;
-    }
-
-
-    private void loopThroughCategories() {
-        String input = "categori";
-    }
-    private void listAllProducts(Register register) {
-
-        /*var category = getUserCategoryChoice(1);
-        this.balance.printProductWithCategory(category);*/
-        InventoryBalance list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
-        for (int i = 0; i < list.size(); i++) {
-
-            System.out.println((i + 1) + " " + list.getProduct(i) + " " + this.balance.nrOfProducts(list.getProduct(i)));
-
-        }
-    }
-
-
-    private void printProducts() {
-        this.balance.printbalancetest();
     }
 
 
