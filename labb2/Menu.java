@@ -1,31 +1,81 @@
 package se.iths.labborationer.labb2;
 
-
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static java.math.BigDecimal.*;
 
 public class Menu {
     private InventoryBalance balance;
     private ArrayList<ProductCategory> categories;
     private Scanner scanner;
+    private CustomerInteface costumerInterface;
+    private AdminInterface adminInterface;
+
 
     public Menu(InventoryBalance balance, ArrayList<ProductCategory> categories, Scanner scanner) {
         this.balance = balance;
         this.categories = categories;
         this.scanner = scanner;
+        costumerInterface = new CustomerInteface(this.balance, this.categories, this.scanner);
+        adminInterface = new AdminInterface(this.balance, this.categories, this.scanner);
     }
 
     public void start() {
         boolean loop = true;
         startUpGreeting();
         startUpMenu(loop);
-
     }
 
+
+    private void startUpGreeting() {
+        System.out.println("Tryck 1 för admin meny");
+        System.out.println("Tryck 2 för kund meny");
+        System.out.println("Tryck e för att avsluta.");
+    }
+
+
     private void startUpMenu(boolean loop) {
+        while (loop) {
+            var input = scanner.next();
+            switch (input) {
+                case "1" -> adminInterface.start(loop);
+                case "2" -> costumerInterface.start(loop);
+                case "e" -> loop = false;
+            }
+        }
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+  private void startUpMenu(boolean loop) {
         while (loop) {
             var input = scanner.next();
             switch (input) {
@@ -96,7 +146,7 @@ public class Menu {
 
         if(isProductAvailable(register, list, choice, nrOfProducts))
             addNrOfProductsToRegister(register, list, choice, nrOfProducts);
-         else
+        else
             System.out.println("Finns inte tillräckligt med varor");
     }
 
@@ -124,7 +174,7 @@ public class Menu {
 
     private static void addNrOfProductsToRegister(Register register, InventoryBalance list, int choice, long nrOfProducts) {
         for (int i = 0; i < nrOfProducts; i++) {
-           register.add(list.getProduct(choice - 1));
+            register.add(list.getProduct(choice - 1));
         }
     }
 
@@ -233,7 +283,7 @@ public class Menu {
                 adminMenu(loop);
             else
                 return this.categories.get(Integer.parseInt(userChoice) - 2);
-            
+
             listCategoriesToAdd();
         }
     }
@@ -390,8 +440,6 @@ public class Menu {
             if (!(this.categories.contains(this.balance.getCategory(i))))
                 this.categories.add(this.balance.getCategory(i));
         }
-    }
-}
-
+    }*/
 
 
