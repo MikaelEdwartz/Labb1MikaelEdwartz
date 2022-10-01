@@ -9,11 +9,13 @@ public class CustomerInteface{
     private InventoryBalance balance;
     private ArrayList<ProductCategory> categories;
     private Scanner scanner;
+    private int count;
 
     public CustomerInteface(InventoryBalance balance, ArrayList<ProductCategory> categories, Scanner scanner) {
         this.balance = balance;
         this.categories = categories;
         this.scanner = scanner;
+
     }
 
     public void start(boolean loop) {
@@ -26,7 +28,7 @@ public class CustomerInteface{
 
             System.out.println("====================");
             switch (input) {
-                case "1" -> loopThroughCategories();
+                case "1" -> loopThroughCategories(register);
                 case "2" -> getSpecificCategor(register);
                 case "3" -> listAllProducts(register);
                 case "4" -> register.printRegister();
@@ -35,13 +37,46 @@ public class CustomerInteface{
             System.out.println("====================");
         }
     }
+
+
+    private void loopThroughCategories(Register register) {
+        int i = 0;
+        while(true) {
+
+            var category = this.categories.get(i);
+            var list = new InventoryBalance(this.balance.getProductWithCategory(category));
+
+            addToRegister(register, list);
+
+        }
+
+    }
+
+
+
+    private void addToRegister(Register register, InventoryBalance list) {
+        printProductsInStore(register, list);
+
+        int choice = getChoice("Skriv siffran på produkten du vill ha eller gå tillbaka.");
+        if (choice == count)
+             start(true);
+        
+        long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
+
+        if(isProductAvailable(register, list, choice, nrOfProducts))
+            addNrOfProductsToRegister(register, list, choice, nrOfProducts);
+        else
+            System.out.println("Finns inte tillräckligt med varor");
+
+    }
+
+
     private ProductCategory getCategoryAtIndex(int i) {
         return this.categories.get(i);
     }
 
     private void getSpecificCategor(Register register) {
         var categoryChoice = getUserCategoryChoice(1);
-
 
         var list = new InventoryBalance(this.balance.getProductWithCategory(categoryChoice));
 
@@ -80,11 +115,6 @@ public class CustomerInteface{
 
 
 
-
-    private void loopThroughCategories() {
-        String input = "categori";
-    }
-
     private void listAllProducts(Register register) {
 
         var list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
@@ -92,22 +122,14 @@ public class CustomerInteface{
 
     }
 
-    private void addToRegister(Register register, InventoryBalance list) {
-        printProductsInStore(register, list);
-
-        int choice = getChoice("Skriv in ett nummer för att lägga till produkten i varukorg");
-        long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
-
-        if(isProductAvailable(register, list, choice, nrOfProducts))
-            addNrOfProductsToRegister(register, list, choice, nrOfProducts);
-        else
-            System.out.println("Finns inte tillräckligt med varor");
-    }
 
     private void printProductsInStore(Register register, InventoryBalance list) {
+        this.count = 1;
         for (int i = 0; i < list.size(); i++) {
             System.out.println((i + 1) + " " + list.getProduct(i) + " " + actualProductsInStore(list, register, i));
+            count++;
         }
+        System.out.println(count + " För att gå tillbaka");
     }
 
     private boolean isProductAvailable(Register register, InventoryBalance list, int choice, long nrOfProducts) {

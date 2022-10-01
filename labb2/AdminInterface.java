@@ -139,6 +139,7 @@ public class AdminInterface {
         int choice = scanner.nextInt();
         return choice;
     }
+
     private ArrayList<Product> addCategoryProductsToList() {
         var category = getUserCategoryChoice(1);
         var tempList = new ArrayList<Product>();
