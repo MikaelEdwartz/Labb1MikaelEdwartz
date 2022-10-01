@@ -38,6 +38,7 @@ public class Menu {
 
     private void customerMenu(boolean loop) {
         var register = new Register();
+        startupkategorier();
         while (loop) {
 
             costumerMenuGreeting();
@@ -46,24 +47,32 @@ public class Menu {
             System.out.println("====================");
             switch (input) {
                 case "1" -> loopThroughCategories();
-                case "2" -> listAllProducts(register);
-                case "3" -> balance.printbalancetest();
-                case "4" -> startupkategorier();
+                case "2" -> getSpecificCategor(register);
+                case "3" -> listAllProducts(register);
+                case "4" -> register.printRegister();
                 case "e" -> loop = false;
             }
             System.out.println("====================");
         }
     }
 
+    private void getSpecificCategor(Register register) {
+        var categoryChoice = getUserCategoryChoice(1);
 
-    private void addToRegister(){
 
+        var list = new InventoryBalance(this.balance.getProductWithCategory(categoryChoice));
+
+        addToRegister(register, list);
 
     }
 
+    public void searchByCategory() {
 
+    }
 
-
+    private void printCategory(ProductCategory category) {
+        this.balance.printProductWithCategory(category);
+    }
 
 
 
@@ -71,30 +80,46 @@ public class Menu {
     private void loopThroughCategories() {
         String input = "categori";
     }
+
     private void listAllProducts(Register register) {
 
-        /*var category = getUserCategoryChoice(1);
-        this.balance.printProductWithCategory(category);*/
-        InventoryBalance list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
-        for (int i = 0; i < list.size(); i++) {
+        var list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
+        addToRegister(register, list);
 
-            System.out.println((i + 1) + " " + list.getProduct(i) + " " + actualProductsInStore(list,register, i));
+    }
 
-        }
+    private void addToRegister(Register register, InventoryBalance list) {
+        printProductsInStore(register, list);
 
-        System.out.println("Skriv in ett nummer för att lägga till produkten i varukorg");
+        int choice = getChoice("Skriv in ett nummer för att lägga till produkten i varukorg");
+        long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
 
-        int choice = scanner.nextInt();
-        System.out.println("Hur många vill du köpa?");
-        long nrOfProducts = scanner.nextInt();
-
-        if(nrOfProducts < this.balance.nrOfProducts(list.getProduct(choice-1))
-                    && this.balance.nrOfProducts(list.getProduct(choice-1)) > 0) {
+        if(isProductAvailable(register, list, choice, nrOfProducts))
             addNrOfProductsToRegister(register, list, choice, nrOfProducts);
+         else
+            System.out.println("Finns inte tillräckligt med varor");
+    }
+
+    private void printProductsInStore(Register register, InventoryBalance list) {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println((i + 1) + " " + list.getProduct(i) + " " + actualProductsInStore(list, register, i));
         }
+    }
 
+    private boolean isProductAvailable(Register register, InventoryBalance list, int choice, long nrOfProducts) {
+        return nrOfProducts <= actualProductsInStore(list, register, (choice - 1)) && actualProductsInStore(list, register, (choice - 1)) >= 0;
+    }
 
+    private long getNrOfProducts(String x) {
+        System.out.println(x);
+        long nrOfProducts = scanner.nextInt();
+        return nrOfProducts;
+    }
 
+    private int getChoice(String x) {
+        System.out.println(x);
+        int choice = scanner.nextInt();
+        return choice;
     }
 
     private static void addNrOfProductsToRegister(Register register, InventoryBalance list, int choice, long nrOfProducts) {
@@ -160,7 +185,7 @@ public class Menu {
                 case "1" -> startupkategorier();//addProductToInventoryBalance(addProductsAndCategories(loop));
                 case "2" -> removeProduct();
                 case "3" -> printProducts();
-                case "4" -> searchByCategory();
+                case "4" -> printCategory(getUserCategoryChoice(1));
                 case "5" -> searchBetweenPrices();
                 case "e" -> loop = false;
             }
@@ -179,6 +204,7 @@ public class Menu {
         System.out.println("1. Vill gå igenom alla kategorier en i taget?");
         System.out.println("2. Välj en specifik kategori");
         System.out.println("3. Printa ut alla produkter");
+        System.out.println("4. print your register");
         System.out.println("e. Gå till kassan och betala");
     }
 
@@ -258,9 +284,7 @@ public class Menu {
         System.out.println("Välj vilken kategori du vill radera en vara från.");
 
         ArrayList<Integer> tempList = getProductIndexes();
-        System.out.println("Välj vilken vara du vill ta bort från lagret");
-
-        int productToRemove = scanner.nextInt();
+        int productToRemove = getChoice("Välj vilken vara du vill ta bort från lagret");
         this.balance.remove(tempList.get(productToRemove - 1));
 
     }
@@ -298,10 +322,7 @@ public class Menu {
         return this.balance.getCategory(i).equals(category);
     }
 
-    public void searchByCategory() {
-        var category = getUserCategoryChoice(1);
-        this.balance.printProductWithCategory(category);
-    }
+
 
 
     private ProductCategory getUserCategoryChoice(int number) {

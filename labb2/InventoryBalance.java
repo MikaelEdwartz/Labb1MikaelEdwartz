@@ -25,9 +25,7 @@ public class InventoryBalance {
         this.inventory.remove(this.getProduct(i));
     }
 
-    public int getSerialCode(int i ){
-        return this.inventory.get(i).productNumber();
-    }
+
 
     public ArrayList<Product> getInventory() {
         return inventory;
@@ -44,14 +42,23 @@ public class InventoryBalance {
         return this.inventory.get(i).category();
     }
 
-    public String getProductName(int i){
-        return this.inventory.get(i).product();
-    }
+
 
     public void printProductWithCategory(ProductCategory category){
         this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
                 .forEach(System.out::println);
+    }
+
+    public ArrayList<Product> getProductWithCategory(ProductCategory category){
+
+        List<Product> list = this.inventory.stream()
+                .filter(p -> productMatch(p.category(), category))
+                .distinct()
+                .toList();
+        ArrayList<Product> sortedList = new ArrayList<>(list);
+
+        return sortedList;
     }
 
     public long nrOfProducts(Product number){
