@@ -32,42 +32,54 @@ public class CustomerInteface{
                 case "2" -> getSpecificCategor(register);
                 case "3" -> listAllProducts(register);
                 case "4" -> register.printRegister();
+                case "5" -> checkOut();
                 case "e" -> loop = false;
             }
             System.out.println("====================");
         }
     }
 
-
-    private void loopThroughCategories(Register register) {
-        int i = 0;
-        while(true) {
-
-            var category = this.categories.get(i);
-            var list = new InventoryBalance(this.balance.getProductWithCategory(category));
-
-            addToRegister(register, list);
-
-        }
+    private void checkOut() {
 
     }
 
 
+    private void loopThroughCategories(Register register) {
+        for (int i = 0; i < this.categories.size(); i++) {
 
+            var category = this.categories.get(i);
+            var list = new InventoryBalance(this.balance.getProductWithCategory(category));
+            System.out.println("0 Nästa kategori");
+            printProductsInStore(register, list);
+            int choice = getChoice("Skriv siffran på produkten du vill ha eller gå tillbaka.");
+
+            if (choice == count)
+                start(true);
+
+            if(choice == 0)
+                continue;
+
+            long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
+
+            if(isProductAvailable(register, list, choice, nrOfProducts))
+                addNrOfProductsToRegister(register, list, choice, nrOfProducts);
+            else
+                System.out.println("Finns inte tillräckligt med varor");
+        }
+    }
+    
     private void addToRegister(Register register, InventoryBalance list) {
         printProductsInStore(register, list);
-
         int choice = getChoice("Skriv siffran på produkten du vill ha eller gå tillbaka.");
         if (choice == count)
              start(true);
-        
+
         long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
 
         if(isProductAvailable(register, list, choice, nrOfProducts))
             addNrOfProductsToRegister(register, list, choice, nrOfProducts);
         else
             System.out.println("Finns inte tillräckligt med varor");
-
     }
 
 
@@ -80,7 +92,8 @@ public class CustomerInteface{
 
         var list = new InventoryBalance(this.balance.getProductWithCategory(categoryChoice));
 
-        addToRegister(register, list);
+        while(true)
+            addToRegister(register, list);
 
     }
     private ProductCategory getUserCategoryChoice(int number) {
@@ -118,7 +131,9 @@ public class CustomerInteface{
     private void listAllProducts(Register register) {
 
         var list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
-        addToRegister(register, list);
+        
+        while(true)
+            addToRegister(register, list);
 
     }
 
