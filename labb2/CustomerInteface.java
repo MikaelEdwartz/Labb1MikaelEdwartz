@@ -1,5 +1,7 @@
 package se.iths.labborationer.labb2;
 
+import java.math.BigDecimal;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,16 +12,17 @@ public class CustomerInteface{
     private ArrayList<ProductCategory> categories;
     private Scanner scanner;
     private int count;
+    private Register register;
 
     public CustomerInteface(InventoryBalance balance, ArrayList<ProductCategory> categories, Scanner scanner) {
         this.balance = balance;
         this.categories = categories;
         this.scanner = scanner;
+        this.register = new Register();
 
     }
 
     public void start(boolean loop) {
-        var register = new Register();
         startupkategorier();
         while (loop) {
 
@@ -32,16 +35,68 @@ public class CustomerInteface{
                 case "2" -> getSpecificCategor(register);
                 case "3" -> listAllProducts(register);
                 case "4" -> register.printRegister();
-                case "5" -> checkOut();
+                case "5" -> checkOut(register);
                 case "e" -> loop = false;
             }
             System.out.println("====================");
         }
     }
 
-    private void checkOut() {
+    private void checkOut(Register register) {
+        var distinctRegister = new Register(register.getRegister(register.register));
+            System.out.println("Produkt\t\t á-pris\t\t\tst\t\ttotalpris");
+        for (int i = 0; i < distinctRegister.size(); i++) {
+         System.out.println(distinctRegister.getProduct(i).product()
+                 + "\t\t\t" + distinctRegister.getProduct(i).price()
+                 + "\t\t\t " + register.sameProductsInRegister(distinctRegister.getProduct(i))
+                 + "\t\t\t " + totalPrice(distinctRegister, i));
+        }
 
+
+
+        System.out.println("");
+
+
+
+        /*
+        Produkt      á-pris     st      totalpris
+        morot        1.79       4            7.16
+        kyckling     2.99       2            5.98
+        Bröd         1          2            2.40
+
+        Totalt                              72.39
+        Discount                            -9.60
+                                       ----------
+        Att betala                          65.69
+
+        Payment                              70.00
+        Your Change                    4.31
+
+        Thank you. Come Again!*/
+
+        System.out.println("");
+
+
+
+
+
+
+
+
+
+
+
+        /*int amount = 10000;
+
+        Discounter discount  = amount -> amount.multiply(BigDecimal.valueOf(0.9));
+*/
     }
+
+    private BigDecimal totalPrice(Register register, int i) {
+        BigDecimal totPrice = register.getProduct(i).price().add(valueOf(register.sameProductsInRegister(register.getProduct(i))));
+        return totPrice;
+    }
+
 
 
     private void loopThroughCategories(Register register) {
@@ -92,7 +147,6 @@ public class CustomerInteface{
 
         var list = new InventoryBalance(this.balance.getProductWithCategory(categoryChoice));
 
-        while(true)
             addToRegister(register, list);
 
     }
@@ -131,9 +185,8 @@ public class CustomerInteface{
     private void listAllProducts(Register register) {
 
         var list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
-        
-        while(true)
-            addToRegister(register, list);
+           while(true)
+                addToRegister(register, list);
 
     }
 

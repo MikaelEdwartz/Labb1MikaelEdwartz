@@ -1,4 +1,11 @@
 package se.iths.labborationer.labb2;
 
-public interface TwentyPercent {
+import java.math.BigDecimal;
+
+public class TwentyPercent implements Discounter{
+
+    @Override
+    public BigDecimal apply(BigDecimal amount){
+        return amount.multiply(BigDecimal.valueOf(0.8));
+    }
 }

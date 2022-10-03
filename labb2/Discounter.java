@@ -5,7 +5,8 @@ import java.util.function.UnaryOperator;
 
 public interface Discounter extends UnaryOperator<BigDecimal> {
 
-    default Discounter(){
-        return amount -> amount.multiply(BigDecimal.valueOf(0.9));
+    default Discounter discount (Discounter disc){
+        return price -> disc.apply(this.apply(price));
     }
+
 }

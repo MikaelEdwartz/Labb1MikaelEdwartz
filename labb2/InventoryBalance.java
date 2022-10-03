@@ -18,7 +18,6 @@ public class InventoryBalance {
 
     public void add(Product product){
         this.inventory.add(product);
-
     }
 
     public void remove(int i){
@@ -92,7 +91,6 @@ public class InventoryBalance {
                 .distinct()
                 .forEach(p -> System.out.println(p + " " +  nrOfProducts(p) + " st i lager"));
 
-        list.stream().distinct().toList();
     }
 
     public ArrayList<Product> getProducts(ArrayList<Product> listIn){
