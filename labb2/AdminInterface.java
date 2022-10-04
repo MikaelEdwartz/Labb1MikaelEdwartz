@@ -2,6 +2,7 @@ package se.iths.labborationer.labb2;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.math.BigDecimal.valueOf;
@@ -9,10 +10,10 @@ import static java.math.BigDecimal.valueOf;
 public class AdminInterface {
 
     private InventoryBalance balance;
-    private ArrayList<ProductCategory> categories;
+    private List<ProductCategory> categories;
     private Scanner scanner;
 
-    public AdminInterface(InventoryBalance balance, ArrayList<ProductCategory> categories, Scanner scanner){
+    public AdminInterface(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner){
         this.balance = balance;
         this.scanner = scanner;
         this.categories = categories;
@@ -77,7 +78,6 @@ public class AdminInterface {
     public void createNewCategory(Scanner scanner) {
         System.out.println("Vänligen skriv in namn på ny kategori.");
         this.categories.add(new ProductCategory(scanner.next()));
-
     }
 
     private void addFirstCategory() {
@@ -115,7 +115,7 @@ public class AdminInterface {
     private void removeProduct() {
         System.out.println("Välj vilken kategori du vill radera en vara från.");
 
-        ArrayList<Integer> tempList = getProductIndexes();
+        List<Integer> tempList = getProductIndexes();
         int productToRemove = getChoice("Välj vilken vara du vill ta bort från lagret");
         this.balance.remove(tempList.get(productToRemove - 1));
 

@@ -14,14 +14,3 @@ public class Main {
 
     }
 }
-//TODO Kunna skapa kategorier                                               J
-//TODO Kunna skapa produkter                                                J
-//TODO Lägga till produkter i ArrayList                                     J
-//TODO Ta bort produkter från ArrayList                                     J
-//TODO Lista vald kategori                                                  J
-//TODO Hålla koll på hur många av en specifik vara som finns i lager        J
-//TODO Sortera produkter från biligast till dyrast
-//TODO Sortera mellan ett visst prisintervall
-//TODO
-//TODO
-//TODO

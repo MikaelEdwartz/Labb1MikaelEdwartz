@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Objects;
 
 public class InventoryBalance {
-    private ArrayList<Product> inventory;
+    private List<Product> inventory;
 
     public InventoryBalance() {
         this.inventory = new ArrayList<>();
 
     }
-    public InventoryBalance(ArrayList<Product> list){
+    public InventoryBalance(List<Product> list){
         this.inventory = new ArrayList<>(list);
     }
 
@@ -26,7 +26,7 @@ public class InventoryBalance {
 
 
 
-    public ArrayList<Product> getInventory() {
+    public List<Product> getInventory() {
         return inventory;
     }
 
@@ -49,19 +49,21 @@ public class InventoryBalance {
                 .forEach(System.out::println);
     }
 
-    public ArrayList<Product> getProductWithCategory(ProductCategory category){
+    public List<Product> getProductWithCategory(ProductCategory category){
 
         List<Product> list = this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
                 .distinct()
                 .toList();
-        ArrayList<Product> sortedList = new ArrayList<>(list);
+        List<Product> sortedList = new ArrayList<>(list);
 
         return sortedList;
     }
 
     public long nrOfProducts(Product number){
-        return this.inventory.stream().filter(product -> product.matchingEanCode(number.productNumber())).count();
+        return this.inventory.stream()
+                .filter(product -> product.matchingEanCode(number.productNumber()))
+                .count();
     }
 
 
@@ -78,10 +80,8 @@ public class InventoryBalance {
                             .forEach(System.out::println);
         }
 
-
     public void printBalance(){
         this.inventory.forEach(System.out::println);
-
     }
 
     public void printbalancetest(){
@@ -93,11 +93,14 @@ public class InventoryBalance {
 
     }
 
-    public ArrayList<Product> getProducts(ArrayList<Product> listIn){
+    public List<Product> getDistinctProducts(List<Product> listIn){
         List<Product> lists = new ArrayList<>(listIn);
-        lists = lists.stream().distinct().toList();
-        ArrayList<Product> list = new ArrayList<>(lists);
-        return list;
+        return lists
+                .stream()
+                .distinct()
+                .toList();
+
+
     }
 
     public String printBalance(int i) {
@@ -137,7 +140,7 @@ public class InventoryBalance {
 
 
 
-//    public ArrayList<String> getAllCategories(){
+//    public List<String> getAllCategories(){
 //        var list = new ArrayList<String>();
 //
 //        for (int i = 0; i < this.inventory.size(); i++) {

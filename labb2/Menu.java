@@ -1,18 +1,19 @@
 package se.iths.labborationer.labb2;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
 public class Menu {
     private InventoryBalance balance;
-    private ArrayList<ProductCategory> categories;
+    private List<ProductCategory> categories;
     private Scanner scanner;
     private CustomerInteface costumerInterface;
     private AdminInterface adminInterface;
 
 
-    public Menu(InventoryBalance balance, ArrayList<ProductCategory> categories, Scanner scanner) {
+    public Menu(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner) {
         this.balance = balance;
         this.categories = categories;
         this.scanner = scanner;

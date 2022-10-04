@@ -1,20 +1,19 @@
 package se.iths.labborationer.labb2;
 
 import java.math.BigDecimal;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.math.BigDecimal.valueOf;
 
 public class CustomerInteface{
     private InventoryBalance balance;
-    private ArrayList<ProductCategory> categories;
+    private List<ProductCategory> categories;
     private Scanner scanner;
     private int count;
     private Register register;
 
-    public CustomerInteface(InventoryBalance balance, ArrayList<ProductCategory> categories, Scanner scanner) {
+    public CustomerInteface(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner) {
         this.balance = balance;
         this.categories = categories;
         this.scanner = scanner;
@@ -93,7 +92,10 @@ public class CustomerInteface{
     }
 
     private BigDecimal totalPrice(Register register, int i) {
-        BigDecimal totPrice = register.getProduct(i).price().add(valueOf(register.sameProductsInRegister(register.getProduct(i))));
+
+        BigDecimal totPrice = register.getProduct(i)
+                .price()
+                .multiply(valueOf(register.sameProductsInRegister(register.getProduct(i))));
         return totPrice;
     }
 
@@ -106,29 +108,30 @@ public class CustomerInteface{
             var list = new InventoryBalance(this.balance.getProductWithCategory(category));
             System.out.println("0 Nästa kategori");
             printProductsInStore(register, list);
-            int choice = getChoice("Skriv siffran på produkten du vill ha eller gå tillbaka.");
-
-            if (choice == count)
-                start(true);
+            int choice = getProductOrQuit();
 
             if(choice == 0)
                 continue;
 
-            long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
-
-            if(isProductAvailable(register, list, choice, nrOfProducts))
-                addNrOfProductsToRegister(register, list, choice, nrOfProducts);
-            else
-                System.out.println("Finns inte tillräckligt med varor");
+            askAndAddProduct(register, list, choice);
         }
     }
-    
+
+
     private void addToRegister(Register register, InventoryBalance list) {
         printProductsInStore(register, list);
+        int choice = getProductOrQuit();
+        askAndAddProduct(register, list, choice);
+    }
+
+    private int getProductOrQuit() {
         int choice = getChoice("Skriv siffran på produkten du vill ha eller gå tillbaka.");
         if (choice == count)
              start(true);
+        return choice;
+    }
 
+    private void askAndAddProduct(Register register, InventoryBalance list, int choice) {
         long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
 
         if(isProductAvailable(register, list, choice, nrOfProducts))
@@ -136,7 +139,6 @@ public class CustomerInteface{
         else
             System.out.println("Finns inte tillräckligt med varor");
     }
-
 
     private ProductCategory getCategoryAtIndex(int i) {
         return this.categories.get(i);
@@ -184,7 +186,7 @@ public class CustomerInteface{
 
     private void listAllProducts(Register register) {
 
-        var list = new InventoryBalance(this.balance.getProducts(this.balance.getInventory()));
+        var list = new InventoryBalance(this.balance.getDistinctProducts(this.balance.getInventory()));
            while(true)
                 addToRegister(register, list);
 
@@ -235,6 +237,7 @@ public class CustomerInteface{
     private void printProducts() {
         this.balance.printbalancetest();
     }
+
 
     public void startupkategorier() {
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
