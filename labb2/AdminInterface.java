@@ -23,7 +23,7 @@ public class AdminInterface {
        while (loop) {
             var input = scanner.nextLine();
             switch (input) {
-                case "1" -> startupkategorier();//addProductToInventoryBalance(addProductsAndCategories(loop));
+                case "1" -> addProductToInventoryBalance(addProductsAndCategories(loop));
                 case "2" -> removeProduct();
                 case "3" -> printProducts();
                 case "4" -> printCategory(getUserCategoryChoice(1));
@@ -33,15 +33,6 @@ public class AdminInterface {
             adminMenuGreeting();
         }
     }
-
-    private void printCategory(ProductCategory category) {
-        this.balance.printProductWithCategory(category);
-    }
-
-    private void printProducts() {
-        this.balance.printbalancetest();
-    }
-
     private void adminMenuGreeting() {
         System.out.println("-----------------------------------------");
         System.out.println("Hej och välkommen till Kortedala mataffär");
@@ -52,154 +43,6 @@ public class AdminInterface {
         System.out.println("5: Sök inom ett prisintervall");
         System.out.println("e: Avsluta");
 
-    }
-
-    public ProductCategory addProductsAndCategories(boolean loop) {
-        addFirstCategory();
-        listCategoriesToAdd();
-
-        while (true) {
-            String userChoice = scanner.next();
-            if (Integer.parseInt(userChoice) == 1)
-                createNewCategory(scanner);
-            else if (userChoice.equals("e"))
-                start(loop);
-            else
-                return this.categories.get(Integer.parseInt(userChoice) - 2);
-
-            listCategoriesToAdd();
-        }
-    }
-
-    public void addProductToInventoryBalance(ProductCategory category) {
-        this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
-    }
-
-    public void createNewCategory(Scanner scanner) {
-        System.out.println("Vänligen skriv in namn på ny kategori.");
-        this.categories.add(new ProductCategory(scanner.next()));
-    }
-
-    private void addFirstCategory() {
-        if (this.categories.isEmpty()) {
-            System.out.println("Det verkar inte finnas någon kategori för matvaror än.");
-            createNewCategory(scanner);
-        }
-    }
-
-    private ProductCategory getCategoryAtIndex(int i) {
-        return this.categories.get(i);
-    }
-
-    private void listCategoriesToAdd() {
-        System.out.println("1. Lägg till ytterligare kategori");
-        printCategoriesInOrder(2);
-    }
-
-
-    private int getProductSerialCode() {
-        System.out.println("Vänligen skriv in streckkod på varan.");
-        return scanner.nextInt();
-    }
-
-    private BigDecimal getProductPrice() {
-        System.out.println("Vänligen skriv in pris på varan.");
-        return scanner.nextBigDecimal();
-    }
-
-    private String getProductName() {
-        System.out.println("Vänligen skriv in namn på varan");
-        return scanner.next();
-    }
-
-    private void removeProduct() {
-        System.out.println("Välj vilken kategori du vill radera en vara från.");
-
-        List<Integer> tempList = getProductIndexes();
-        int productToRemove = getChoice("Välj vilken vara du vill ta bort från lagret");
-        this.balance.remove(tempList.get(productToRemove - 1));
-
-    }
-
-    private ArrayList<Integer> getProductIndexes() {
-        var category = getUserCategoryChoice(1);
-        var tempList = new ArrayList<Integer>();
-        int count = 1;
-        for (int i = 0; i < this.balance.size(); i++) {
-            if (categoryMatch(category, i)) {
-                System.out.println(count + " " + this.balance.printBalance(i));
-                tempList.add(i);
-                count++;
-            }
-        }
-        return tempList;
-    }
-    private int getChoice(String x) {
-        System.out.println(x);
-        int choice = scanner.nextInt();
-        return choice;
-    }
-
-    private ArrayList<Product> addCategoryProductsToList() {
-        var category = getUserCategoryChoice(1);
-        var tempList = new ArrayList<Product>();
-        int count = 1;
-        for (int i = 0; i < this.balance.size(); i++) {
-            if (categoryMatch(category, i)) {
-                System.out.println(count + " " + this.balance.printBalance(i));
-                tempList.add(this.balance.getProduct(i));
-                count++;
-            }
-        }
-        return tempList;
-    }
-
-
-    private boolean categoryMatch(ProductCategory category, int i) {
-        return this.balance.getCategory(i).equals(category);
-    }
-
-
-
-
-    private ProductCategory getUserCategoryChoice(int number) {
-        printCategoriesInOrder(number);
-        return this.categories.get(scanner.nextInt() - 1);
-    }
-
-    private void printCategoriesInOrder(int number) {
-        if (this.categories.size() >= 1) {
-            printCategoriesFormated(number);
-        }
-    }
-
-    private void printCategoriesFormated(int number) {
-        for (int i = 0; i < this.categories.size(); i++) {
-            System.out.println((i + number) + ". " + getCategoryAtIndex(i) + ".");
-        }
-    }
-
-
-    public void printInventoryBalance() {
-        this.balance.printBalance();
-    }
-
-    public void searchBetweenPrices() {
-        BigDecimal lowestPrice = getLowestSearchPrice();
-        BigDecimal highestPrice = getHighestSearchPrice();
-        this.balance.printBetweenPrices(lowestPrice, highestPrice);
-    }
-
-    private BigDecimal getHighestSearchPrice() {
-        System.out.println("Vad är det högsta priset");
-        var highestPrice = scanner.nextBigDecimal();
-        return highestPrice;
-    }
-
-    private BigDecimal getLowestSearchPrice() {
-        System.out.println("Vad är det lägsta priset");
-        var lowestPrice = scanner.nextBigDecimal();
-        return lowestPrice;
     }
 
     public void startupkategorier() {
@@ -226,4 +69,133 @@ public class AdminInterface {
                 this.categories.add(this.balance.getCategory(i));
         }
     }
+
+    public void addProductToInventoryBalance(ProductCategory category) {
+        this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
+    }
+    private int getProductSerialCode() {
+        System.out.println("Vänligen skriv in streckkod på varan.");
+        return scanner.nextInt();
+    }
+    private BigDecimal getProductPrice() {
+        System.out.println("Vänligen skriv in pris på varan.");
+        return scanner.nextBigDecimal();
+    }
+    private String getProductName() {
+        System.out.println("Vänligen skriv in namn på varan");
+        return scanner.next();
+    }
+    //_________________________________________________________________________________________________
+    public ProductCategory addProductsAndCategories(boolean loop) {
+        addFirstCategory();
+        listCategoriesToAdd();
+
+        while (true) {
+            String userChoice = scanner.next();
+            if (Integer.parseInt(userChoice) == 1)
+                createNewCategory(scanner);
+            else if (userChoice.equals("e"))
+                start(loop);
+            else
+                return this.categories.get(Integer.parseInt(userChoice) - 2);
+
+            listCategoriesToAdd();
+        }
+    }
+    private void addFirstCategory() {
+        if (this.categories.isEmpty()) {
+            System.out.println("Det verkar inte finnas någon kategori för matvaror än.");
+            createNewCategory(scanner);
+        }
+    }
+    public void createNewCategory(Scanner scanner) {
+        System.out.println("Vänligen skriv in namn på ny kategori.");
+        this.categories.add(new ProductCategory(scanner.next()));
+    }
+    private void listCategoriesToAdd() {
+        System.out.println("1. Lägg till ytterligare kategori");
+        printCategoriesInOrder(2);
+    }
+    private void printCategoriesInOrder(int number) {
+        if (this.categories.size() >= 1) {
+            printCategoriesFormated(number);
+        }
+    }
+    private void printCategoriesFormated(int number) {
+        for (int i = 0; i < this.categories.size(); i++) {
+            System.out.println((i + number) + ". " + getCategoryAtIndex(i) + ".");
+        }
+    }
+    private ProductCategory getCategoryAtIndex(int i) {
+        return this.categories.get(i);
+    }
+//_________________________________________________________________________________________________
+    private void removeProduct() {
+    System.out.println("Välj vilken kategori du vill radera en vara från.");
+
+    List<Integer> tempList = getProductIndexes();
+    int productToRemove = getChoice("Välj vilken vara du vill ta bort från lagret");
+    this.balance.remove(tempList.get(productToRemove - 1));
+
+}
+    private ArrayList<Integer> getProductIndexes() {
+        var category = getUserCategoryChoice(1);
+        var tempList = new ArrayList<Integer>();
+        int count = 1;
+        for (int i = 0; i < this.balance.size(); i++) {
+            if (categoryMatch(category, i)) {
+                System.out.println(count + " " + this.balance.printBalance(i));
+                tempList.add(i);
+                count++;
+            }
+        }
+        return tempList;
+    }
+    private int getChoice(String x) {
+        System.out.println(x);
+        int choice = scanner.nextInt();
+        return choice;
+    }
+    //_________________________________________________________________________________________________
+    private void printProducts() {
+        this.balance.printbalancetest(this.balance.getInventory());
+    }
+    //_________________________________________________________________________________________________
+    private void printCategory(ProductCategory category) {
+        this.balance.printProductWithCategory(category);
+    }
+    private ProductCategory getUserCategoryChoice(int number) {
+        printCategoriesInOrder(number);
+        return this.categories.get(scanner.nextInt() - 1);
+    }
+    private boolean categoryMatch(ProductCategory category, int i) {
+        return this.balance.getCategory(i).equals(category);
+    }
+
+//_________________________________________________________________________________________________
+    public void searchBetweenPrices() {
+        BigDecimal lowestPrice = getLowestSearchPrice();
+        BigDecimal highestPrice = getHighestSearchPrice();
+        this.balance.printBetweenPrices(lowestPrice, highestPrice);
+    }
+    private BigDecimal getHighestSearchPrice() {
+        System.out.println("Vad är det högsta priset");
+        var highestPrice = scanner.nextBigDecimal();
+        return highestPrice;
+    }
+    private BigDecimal getLowestSearchPrice() {
+        System.out.println("Vad är det lägsta priset");
+        var lowestPrice = scanner.nextBigDecimal();
+        return lowestPrice;
+    }
+//_________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
 }

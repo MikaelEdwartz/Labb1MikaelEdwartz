@@ -37,7 +37,6 @@ public class InventoryBalance {
 
 
     public ProductCategory getCategory(int i){
-
         return this.inventory.get(i).category();
     }
 
@@ -49,15 +48,11 @@ public class InventoryBalance {
                 .forEach(System.out::println);
     }
 
-    public List<Product> getProductWithCategory(ProductCategory category){
-
-        List<Product> list = this.inventory.stream()
+    public List<Product> getListWithChosenCategory(ProductCategory category){
+        return this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
                 .distinct()
                 .toList();
-        List<Product> sortedList = new ArrayList<>(list);
-
-        return sortedList;
     }
 
     public long nrOfProducts(Product number){
@@ -74,37 +69,46 @@ public class InventoryBalance {
     public void printBetweenPrices(BigDecimal lowestInputPrice, BigDecimal highestInputPrice){
             BigDecimal lowestPrice = lowestInputPrice;
             BigDecimal highestPrice = highestInputPrice;
-            this.inventory.stream().filter(p-> p.price()
-                            .compareTo(highestPrice) <= 0)
-                            .filter(p -> p.price().compareTo(lowestPrice) >= 0)
+            this.inventory.stream().filter(p-> isLowerThan(highestPrice, p))
+                            .filter(p -> isHigherThan(lowestPrice, p))
                             .forEach(System.out::println);
         }
+
+    private static boolean isLowerThan(BigDecimal highestPrice, Product p) {
+        return p.price().compareTo(highestPrice) <= 0;
+    }
+
+    private static boolean isHigherThan(BigDecimal lowestPrice, Product p) {
+        return p.price().compareTo(lowestPrice) >= 0;
+    }
 
     public void printBalance(){
         this.inventory.forEach(System.out::println);
     }
 
-    public void printbalancetest(){
-        var list = new ArrayList<>(this.inventory);
-
-        list.stream()
+    public void printbalancetest(List<Product> inventory){
+        inventory.stream()
                 .distinct()
-                .forEach(p -> System.out.println(p + " " +  nrOfProducts(p) + " st i lager"));
+                .forEach(p -> printProductSaldo(p));
 
+    }
+
+    private void printProductSaldo(Product p) {
+        System.out.println(p + " " +  nrOfProducts(p) + " st i lager");
     }
 
     public List<Product> getDistinctProducts(List<Product> listIn){
-        List<Product> lists = new ArrayList<>(listIn);
-        return lists
+        return listIn
                 .stream()
                 .distinct()
                 .toList();
-
-
     }
 
     public String printBalance(int i) {
-        return this.inventory.get(i).category() + ", " + this.inventory.get(i).product() + ", "  + this.inventory.get(i).price() +   ", " + this.inventory.get(i).productNumber();
+        return this.inventory.get(i).category() + ", "
+                + this.inventory.get(i).product() + ", "
+                + this.inventory.get(i).price() +   ", "
+                + this.inventory.get(i).productNumber();
     }
 
     private boolean categoryMatch(ProductCategory category, int i) {

@@ -42,7 +42,8 @@ public class CustomerInteface{
     }
 
     private void checkOut(Register register) {
-        var distinctRegister = new Register(register.getRegister(register.register));
+        var distinctRegister = new Register(register.getDistinctRegister(register.register));
+
             System.out.println("Produkt\t\t á-pris\t\t\tst\t\ttotalpris");
         for (int i = 0; i < distinctRegister.size(); i++) {
          System.out.println(distinctRegister.getProduct(i).product()
@@ -81,10 +82,6 @@ public class CustomerInteface{
 
 
 
-
-
-
-
         /*int amount = 10000;
 
         Discounter discount  = amount -> amount.multiply(BigDecimal.valueOf(0.9));
@@ -105,7 +102,7 @@ public class CustomerInteface{
         for (int i = 0; i < this.categories.size(); i++) {
 
             var category = this.categories.get(i);
-            var list = new InventoryBalance(this.balance.getProductWithCategory(category));
+            var list = new InventoryBalance(this.balance.getListWithChosenCategory(category));
             System.out.println("0 Nästa kategori");
             printProductsInStore(register, list);
             int choice = getProductOrQuit();
@@ -147,7 +144,7 @@ public class CustomerInteface{
     private void getSpecificCategor(Register register) {
         var categoryChoice = getUserCategoryChoice(1);
 
-        var list = new InventoryBalance(this.balance.getProductWithCategory(categoryChoice));
+        var list = new InventoryBalance(this.balance.getListWithChosenCategory(categoryChoice));
 
             addToRegister(register, list);
 
@@ -235,7 +232,7 @@ public class CustomerInteface{
 
 
     private void printProducts() {
-        this.balance.printbalancetest();
+        this.balance.printbalancetest(this.balance.getInventory());
     }
 
 
