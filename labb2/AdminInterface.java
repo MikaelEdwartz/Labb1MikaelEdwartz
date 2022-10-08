@@ -9,21 +9,22 @@ import static java.math.BigDecimal.valueOf;
 
 public class AdminInterface {
 
-    private InventoryBalance balance;
-    private List<ProductCategory> categories;
-    private Scanner scanner;
+    private final InventoryBalance inventory;
+    private final List<ProductCategory> categoryList;
+    private final Scanner scanner;
 
-    public AdminInterface(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner){
-        this.balance = balance;
+    public AdminInterface(InventoryBalance inventory, List<ProductCategory> categories, Scanner scanner){
+        this.inventory = inventory;
         this.scanner = scanner;
-        this.categories = categories;
+        this.categoryList = categories;
     }
 
     public void start(boolean loop) {
+        startupkategorier();
        while (loop) {
             var input = scanner.nextLine();
             switch (input) {
-                case "1" -> addProductToInventoryBalance(addProductsAndCategories(loop));
+                case "1" -> addProductsToInventory(addProductsAndCategories(loop));
                 case "2" -> removeProduct();
                 case "3" -> printProducts();
                 case "4" -> printCategory(getUserCategoryChoice(1));
@@ -46,32 +47,32 @@ public class AdminInterface {
     }
 
     public void startupkategorier() {
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
-        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.inventory.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
+        this.inventory.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
 
-        for (int i = 0; i < this.balance.size(); i++) {
-            if (!(this.categories.contains(this.balance.getCategory(i))))
-                this.categories.add(this.balance.getCategory(i));
+        for (int i = 0; i < this.inventory.size(); i++) {
+            if (!(this.categoryList.contains(this.inventory.getCategory(i))))
+                this.categoryList.add(this.inventory.getCategory(i));
         }
     }
 
-    public void addProductToInventoryBalance(ProductCategory category) {
-        this.balance.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
+    public void addProductsToInventory(ProductCategory category) {
+        this.inventory.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
     }
     private int getProductSerialCode() {
         System.out.println("Vänligen skriv in streckkod på varan.");
@@ -97,96 +98,101 @@ public class AdminInterface {
             else if (userChoice.equals("e"))
                 start(loop);
             else
-                return this.categories.get(Integer.parseInt(userChoice) - 2);
+                return chosenCategory(Integer.parseInt(userChoice) - 2);
 
             listCategoriesToAdd();
         }
     }
+
+    private ProductCategory chosenCategory(int userChoice) {
+        return this.categoryList.get(userChoice);
+    }
+
     private void addFirstCategory() {
-        if (this.categories.isEmpty()) {
+        if (this.categoryList.isEmpty()) {
             System.out.println("Det verkar inte finnas någon kategori för matvaror än.");
             createNewCategory(scanner);
         }
     }
     public void createNewCategory(Scanner scanner) {
         System.out.println("Vänligen skriv in namn på ny kategori.");
-        this.categories.add(new ProductCategory(scanner.next()));
+        this.categoryList.add(new ProductCategory(scanner.next()));
     }
     private void listCategoriesToAdd() {
         System.out.println("1. Lägg till ytterligare kategori");
         printCategoriesInOrder(2);
     }
     private void printCategoriesInOrder(int number) {
-        if (this.categories.size() >= 1) {
+        if (this.categoryList.size() >= 1) {
             printCategoriesFormated(number);
         }
     }
     private void printCategoriesFormated(int number) {
-        for (int i = 0; i < this.categories.size(); i++) {
-            System.out.println((i + number) + ". " + getCategoryAtIndex(i) + ".");
+        for (int i = 0; i < this.categoryList.size(); i++) {
+            System.out.println((i + number) + ". " + chosenCategory(i) + ".");
         }
     }
-    private ProductCategory getCategoryAtIndex(int i) {
-        return this.categories.get(i);
-    }
+
 //_________________________________________________________________________________________________
     private void removeProduct() {
     System.out.println("Välj vilken kategori du vill radera en vara från.");
 
-    List<Integer> tempList = getProductIndexes();
-    int productToRemove = getChoice("Välj vilken vara du vill ta bort från lagret");
-    this.balance.remove(tempList.get(productToRemove - 1));
+    List<Integer> productsToRemoveList = getProductIndexes();
+    int productToRemove = getChoice();
+    this.inventory.remove(productsToRemoveList.get(productToRemove - 1));
 
 }
     private ArrayList<Integer> getProductIndexes() {
         var category = getUserCategoryChoice(1);
         var tempList = new ArrayList<Integer>();
         int count = 1;
-        for (int i = 0; i < this.balance.size(); i++) {
+        printMatchingProductsAndAddToLoop(category, tempList, count);
+        return tempList;
+    }
+
+    private void printMatchingProductsAndAddToLoop(ProductCategory category, ArrayList<Integer> tempList, int count) {
+        for (int i = 0; i < this.inventory.size(); i++) {
             if (categoryMatch(category, i)) {
-                System.out.println(count + " " + this.balance.printBalance(i));
+                System.out.println(count + " " + this.inventory.printBalance(i));
                 tempList.add(i);
                 count++;
             }
         }
-        return tempList;
     }
-    private int getChoice(String x) {
-        System.out.println(x);
-        int choice = scanner.nextInt();
-        return choice;
+
+    private int getChoice() {
+        System.out.println("Välj vilken vara du vill ta bort från lagret");
+        return scanner.nextInt();
     }
     //_________________________________________________________________________________________________
     private void printProducts() {
-        this.balance.printbalancetest(this.balance.getInventory());
+        this.inventory.printbalancetest(this.inventory.getInventory());
     }
     //_________________________________________________________________________________________________
     private void printCategory(ProductCategory category) {
-        this.balance.printProductWithCategory(category);
+        this.inventory.printProductWithCategory(category);
     }
     private ProductCategory getUserCategoryChoice(int number) {
         printCategoriesInOrder(number);
-        return this.categories.get(scanner.nextInt() - 1);
+        return chosenCategory(scanner.nextInt() - 1);
     }
     private boolean categoryMatch(ProductCategory category, int i) {
-        return this.balance.getCategory(i).equals(category);
+        return this.inventory.getCategory(i).equals(category);
     }
 
 //_________________________________________________________________________________________________
     public void searchBetweenPrices() {
         BigDecimal lowestPrice = getLowestSearchPrice();
         BigDecimal highestPrice = getHighestSearchPrice();
-        this.balance.printBetweenPrices(lowestPrice, highestPrice);
+        this.inventory.printBetweenPrices(lowestPrice, highestPrice);
     }
     private BigDecimal getHighestSearchPrice() {
         System.out.println("Vad är det högsta priset");
-        var highestPrice = scanner.nextBigDecimal();
-        return highestPrice;
+        return scanner.nextBigDecimal();
     }
     private BigDecimal getLowestSearchPrice() {
         System.out.println("Vad är det lägsta priset");
-        var lowestPrice = scanner.nextBigDecimal();
-        return lowestPrice;
+        return scanner.nextBigDecimal();
     }
 //_________________________________________________________________________________________________
 

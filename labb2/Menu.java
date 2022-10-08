@@ -6,19 +6,15 @@ import java.util.Scanner;
 
 
 public class Menu {
-    private InventoryBalance balance;
-    private List<ProductCategory> categories;
-    private Scanner scanner;
-    private CustomerInteface costumerInterface;
-    private AdminInterface adminInterface;
+    private final Scanner scanner;
+    private final CustomerInteface costumerInterface;
+    private final AdminInterface adminInterface;
 
 
     public Menu(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner) {
-        this.balance = balance;
-        this.categories = categories;
         this.scanner = scanner;
-        costumerInterface = new CustomerInteface(this.balance, this.categories, this.scanner);
-        adminInterface = new AdminInterface(this.balance, this.categories, this.scanner);
+        costumerInterface = new CustomerInteface(balance, categories, scanner);
+        adminInterface = new AdminInterface(balance, categories, scanner);
     }
 
     public void start() {
