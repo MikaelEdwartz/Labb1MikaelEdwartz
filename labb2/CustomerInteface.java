@@ -43,15 +43,24 @@ public class CustomerInteface{
 
     private void checkOut(Register register) {
         var distinctRegister = new Register(register.getDistinctRegister(register.register));
-
+        var priceToPay = valueOf(0);
             System.out.println("Produkt\t\t á-pris\t\t\tst\t\ttotalpris");
+        var price = valueOf(0);
+
         for (int i = 0; i < distinctRegister.size(); i++) {
-         System.out.println(distinctRegister.getProduct(i).product()
+
+            System.out.println(distinctRegister.getProduct(i).product()
                  + "\t\t\t" + distinctRegister.getProduct(i).price()
                  + "\t\t\t " + register.sameProductsInRegister(distinctRegister.getProduct(i))
-                 + "\t\t\t " + totalPrice(distinctRegister, i));
+                 + "\t\t\t " + totalPrice(distinctRegister, distinctRegister.getProduct(i)));
+
+         priceToPay = priceToPay.add(totalPrice(distinctRegister, distinctRegister.getProduct(i)));
+
         }
 
+        System.out.println("Att betala \t\t\t" + price);
+
+        System.out.println(priceToPay);
 
 
         System.out.println("");
@@ -88,12 +97,14 @@ public class CustomerInteface{
 */
     }
 
-    private BigDecimal totalPrice(Register register, int i) {
+    private BigDecimal totalPrice(Register register, Product product) {
+        var nrOfProducts = valueOf(register.sameProductsInRegister(product));
+        var productprice = product.price();
+        var productCost = nrOfProducts.multiply(productprice);
 
-        BigDecimal totPrice = register.getProduct(i)
-                .price()
-                .multiply(valueOf(register.sameProductsInRegister(register.getProduct(i))));
-        return totPrice;
+        return productCost;
+
+
     }
 
 
