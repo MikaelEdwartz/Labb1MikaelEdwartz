@@ -45,25 +45,31 @@ public class CustomerInteface{
         var distinctRegister = new Register(register.getDistinctRegister(register.register));
         var priceToPay = valueOf(0);
             System.out.println("Produkt\t\t á-pris\t\t\tst\t\ttotalpris");
-        var price = valueOf(0);
 
         for (int i = 0; i < distinctRegister.size(); i++) {
 
             System.out.println(distinctRegister.getProduct(i).product()
                  + "\t\t\t" + distinctRegister.getProduct(i).price()
-                 + "\t\t\t " + register.sameProductsInRegister(distinctRegister.getProduct(i))
-                 + "\t\t\t " + totalPrice(distinctRegister, distinctRegister.getProduct(i)));
+                 + "\t\t\t" + nrOfProducts(distinctRegister.getProduct(i))
+                 + "\t\t\t" + totalPrice(register, distinctRegister.getProduct(i)));
 
-         priceToPay = priceToPay.add(totalPrice(distinctRegister, distinctRegister.getProduct(i)));
+         priceToPay = priceToPay.add(totalPrice(register, distinctRegister.getProduct(i)));
 
         }
+        System.out.println();
 
-        System.out.println("Att betala \t\t\t" + price);
+        BigDecimal discountedPrice = priceToPay;
 
+        if(priceToPay.compareTo(valueOf(2000)) > 0)
+            discountedPrice = applyDiscount(new TwentyPercent(), priceToPay);
+        else if(priceToPay.compareTo(valueOf(1000)) > 0)
+            discountedPrice = applyDiscount(new TenPercent(), priceToPay);
+
+        System.out.println("Totalt \t\t\t\t\t\t\t\t" + priceToPay + " kr");
+        printDiscountValue(priceToPay);
+        System.out.println("\t\t\t\t\t\t\t\t\t__________");
+        System.out.println("Att betala \t\t\t\t\t\t\t\t" + discountedPrice + " kr");
         System.out.println(priceToPay);
-
-
-        System.out.println("");
 
 
 
@@ -83,28 +89,32 @@ public class CustomerInteface{
 
         Thank you. Come Again!*/
 
-        System.out.println("");
+    }
 
+    private static void printDiscountValue(BigDecimal priceToPay) {
+       var discount = valueOf(0);
+        if(priceToPay.compareTo(valueOf(2000)) > 0)
+             discount = priceToPay.multiply(valueOf(0.2));
+        else if(priceToPay.compareTo(valueOf(1000)) > 0)
+             discount = priceToPay.multiply(valueOf(0.1));
 
+        if(discount.compareTo(valueOf(1)) > 0)
+            System.out.println("Rabatt \t\t\t\t\t\t\t\t\t" + discount + " kr");
+    }
 
+    public BigDecimal applyDiscount(Discounter discount, BigDecimal amount){
+        return discount.apply(amount);
 
-
-
-
-        /*int amount = 10000;
-
-        Discounter discount  = amount -> amount.multiply(BigDecimal.valueOf(0.9));
-*/
     }
 
     private BigDecimal totalPrice(Register register, Product product) {
-        var nrOfProducts = valueOf(register.sameProductsInRegister(product));
-        var productprice = product.price();
-        var productCost = nrOfProducts.multiply(productprice);
+        var nrOfProducts = valueOf(nrOfProducts(product));
+        return product.price().multiply(nrOfProducts);
 
-        return productCost;
+    }
 
-
+    private int nrOfProducts(Product product){
+        return (int) register.sameProductsInRegister(product);
     }
 
 

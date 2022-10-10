@@ -45,14 +45,15 @@ public class InventoryBalance {
     public void printProductWithCategory(ProductCategory category){
         this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
-                .forEach(System.out::println);
+                .distinct()
+                .forEach(this::printProductSaldo);
     }
 
     public List<Product> getListWithChosenCategory(ProductCategory category){
         return this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
                 .distinct()
-                .toList();
+                 .toList();
     }
 
     public long nrOfProducts(Product number){
@@ -71,7 +72,8 @@ public class InventoryBalance {
             BigDecimal highestPrice = highestInputPrice;
             this.inventory.stream().filter(p-> isLowerThan(highestPrice, p))
                             .filter(p -> isHigherThan(lowestPrice, p))
-                            .forEach(System.out::println);
+                            .distinct()
+                            .forEach(this::printProductSaldo);
         }
 
     private static boolean isLowerThan(BigDecimal highestPrice, Product p) {
