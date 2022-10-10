@@ -1,6 +1,7 @@
 package se.iths.labborationer.labb2;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,7 +23,7 @@ public class CustomerInteface{
     }
 
     public void start(boolean loop) {
-        startupkategorier();
+        //
         while (loop) {
 
             costumerMenuGreeting();
@@ -36,22 +37,32 @@ public class CustomerInteface{
                 case "4" -> register.printRegister();
                 case "5" -> checkOut(register);
                 case "e" -> loop = false;
+                case "9" -> this.balance.printbalancetest();
+                case "8" -> removeRegisterItemsFromBalance();
+                case "7" -> startupkategorier();
             }
             System.out.println("====================");
         }
     }
 
     private void checkOut(Register register) {
+//        this.register.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+//        this.register.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+//        this.register.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
+//        this.register.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+//        this.register.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+
+
         var distinctRegister = new Register(register.getDistinctRegister(register.register));
         var priceToPay = valueOf(0);
-            System.out.println("Produkt\t\t á-pris\t\t\tst\t\ttotalpris");
+            System.out.println("Produkt"+printTab(3)+ "á-pris" +printTab(2)+"st\t\ttotalpris");
 
         for (int i = 0; i < distinctRegister.size(); i++) {
 
             System.out.println(distinctRegister.getProduct(i).product()
-                 + "\t\t\t" + distinctRegister.getProduct(i).price()
-                 + "\t\t\t" + nrOfProducts(distinctRegister.getProduct(i))
-                 + "\t\t\t" + totalPrice(register, distinctRegister.getProduct(i)));
+                 + printTab(3) + distinctRegister.getProduct(i).price()
+                 + printTab(3) + nrOfProducts(distinctRegister.getProduct(i))
+                 + printTab(2) + totalPrice(register, distinctRegister.getProduct(i)));
 
          priceToPay = priceToPay.add(totalPrice(register, distinctRegister.getProduct(i)));
 
@@ -65,10 +76,10 @@ public class CustomerInteface{
         else if(priceToPay.compareTo(valueOf(1000)) > 0)
             discountedPrice = applyDiscount(new TenPercent(), priceToPay);
 
-        System.out.println("Totalt \t\t\t\t\t\t\t\t" + priceToPay + " kr");
+        System.out.println("Totalt " + printTab(8)+ priceToPay + " kr");
         printDiscountValue(priceToPay);
-        System.out.println("\t\t\t\t\t\t\t\t\t__________");
-        System.out.println("Att betala \t\t\t\t\t\t\t\t" + discountedPrice + " kr");
+        System.out.println(printTab(9) + "__________");
+        System.out.println("Att betala "+ printTab(7) + discountedPrice + " kr");
         System.out.println(priceToPay);
 
 
@@ -91,7 +102,13 @@ public class CustomerInteface{
 
     }
 
-    private static void printDiscountValue(BigDecimal priceToPay) {
+    private void removeRegisterItemsFromBalance(){
+        var templist = new ArrayList<>(balance.getInventory());
+        for (int i = 0; i < register.size(); i++) {
+          this.balance.remove(this.register.getProduct(i));
+        }
+    }
+    private  void printDiscountValue(BigDecimal priceToPay) {
        var discount = valueOf(0);
         if(priceToPay.compareTo(valueOf(2000)) > 0)
              discount = priceToPay.multiply(valueOf(0.2));
@@ -99,10 +116,10 @@ public class CustomerInteface{
              discount = priceToPay.multiply(valueOf(0.1));
 
         if(discount.compareTo(valueOf(1)) > 0)
-            System.out.println("Rabatt \t\t\t\t\t\t\t\t\t" + discount + " kr");
+            System.out.println("Rabatt " + printTab(8) + discount + " kr");
     }
 
-    public BigDecimal applyDiscount(Discounter discount, BigDecimal amount){
+    private BigDecimal applyDiscount(Discounter discount, BigDecimal amount){
         return discount.apply(amount);
 
     }
@@ -185,7 +202,7 @@ public class CustomerInteface{
         }
     }
 
-    public void searchByCategory() {
+    private void searchByCategory() {
 
     }
     private void costumerMenuGreeting() {
@@ -253,11 +270,11 @@ public class CustomerInteface{
 
 
     private void printProducts() {
-        this.balance.printbalancetest(this.balance.getInventory());
+        this.balance.printbalancetest();
     }
 
 
-    public void startupkategorier() {
+    private void startupkategorier() {
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
         this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
@@ -280,6 +297,16 @@ public class CustomerInteface{
             if (!(this.categories.contains(this.balance.getCategory(i))))
                 this.categories.add(this.balance.getCategory(i));
         }
+    }
+
+    private String printTab(int nrOfTabs){
+        String tabs = "";
+        for (int j = 0; j < nrOfTabs; j++) {
+            tabs = tabs + "\t";
+        }
+
+        return tabs;
+
     }
 }
 

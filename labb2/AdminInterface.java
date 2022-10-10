@@ -138,7 +138,7 @@ public class AdminInterface {
     System.out.println("Välj vilken kategori du vill radera en vara från.");
 
     List<Integer> productsToRemoveList = getProductIndexes();
-    int productToRemove = getChoice();
+    int productToRemove = Integer.parseInt(getChoice());
     this.inventory.remove(productsToRemoveList.get(productToRemove - 1));
 
 }
@@ -160,13 +160,13 @@ public class AdminInterface {
         }
     }
 
-    private int getChoice() {
+    private String getChoice() {
         System.out.println("Välj vilken vara du vill ta bort från lagret");
-        return scanner.nextInt();
+        return scanner.next();
     }
     //_________________________________________________________________________________________________
     private void printProducts() {
-        this.inventory.printbalancetest(this.inventory.getInventory());
+        this.inventory.printbalancetest();
     }
     //_________________________________________________________________________________________________
     private void printCategory(ProductCategory category) {

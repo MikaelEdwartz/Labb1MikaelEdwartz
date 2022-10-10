@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class InventoryBalance {
     private List<Product> inventory;
@@ -24,10 +25,14 @@ public class InventoryBalance {
         this.inventory.remove(this.getProduct(i));
     }
 
-    public void remove(int EanNumber, String name){
-
+    public void remove(Product product){
+        this.inventory.remove(product);
     }
 
+    public boolean contains(Product product){
+        return this.inventory.stream()
+                .anyMatch(p -> p.equals(product));
+    }
 
 
     public List<Product> getInventory() {
@@ -93,7 +98,7 @@ public class InventoryBalance {
         this.inventory.forEach(System.out::println);
     }
 
-    public void printbalancetest(List<Product> inventory){
+    public void printbalancetest(){
         inventory.stream()
                 .distinct()
                 .forEach(p -> printProductSaldo(p));
