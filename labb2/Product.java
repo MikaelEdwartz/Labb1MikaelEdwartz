@@ -7,6 +7,6 @@ public record Product(ProductCategory category, String product, BigDecimal price
         return this.productNumber == productNumber;
     }
     public String toString(){
-        return category + ", " + product + ", "  + price +   ", " + productNumber;
+        return category + "\t\t\t" + product + "\t\t"  + price + "kr \t\t" + productNumber + "\t\t";
     }
 }

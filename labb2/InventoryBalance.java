@@ -24,6 +24,10 @@ public class InventoryBalance {
         this.inventory.remove(this.getProduct(i));
     }
 
+    public void remove(int EanNumber, String name){
+
+    }
+
 
 
     public List<Product> getInventory() {
@@ -43,6 +47,7 @@ public class InventoryBalance {
 
 
     public void printProductWithCategory(ProductCategory category){
+        System.out.println("Kategori \t Produkt \t\t Pris \t Artikelnummer");
         this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
                 .distinct()
