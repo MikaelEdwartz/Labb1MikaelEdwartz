@@ -1,5 +1,7 @@
 package se.iths.labborationer.labb2;
 
+import com.google.gson.Gson;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,23 +14,29 @@ public class AdminInterface {
     private final InventoryBalance inventory;
     private final List<ProductCategory> categoryList;
     private final Scanner scanner;
+    private final Menu menu;
+    private final JsonReader reader;
 
-    public AdminInterface(InventoryBalance inventory, List<ProductCategory> categories, Scanner scanner){
+    public AdminInterface(InventoryBalance inventory, List<ProductCategory> categories, Scanner scanner, Menu menu, JsonReader reader){
         this.inventory = inventory;
         this.scanner = scanner;
         this.categoryList = categories;
+        this.menu = menu;
+        this.reader = reader;
     }
 
-    public void start(boolean loop) {
-        startupkategorier();
+    public void start() {
+
+        boolean loop = true;
        while (loop) {
             var input = scanner.nextLine();
             switch (input) {
-                case "1" -> addProductsToInventory(addProductsAndCategories(loop));
+                case "1" -> addProductsToInventory(addProductsAndCategories());
                 case "2" -> removeProduct();
                 case "3" -> printProducts();
                 case "4" -> printCategory(getUserCategoryChoice(1));
                 case "5" -> searchBetweenPrices();
+                case "6" -> menu.start();
                 case "e" -> loop = false;
             }
             adminMenuGreeting();
@@ -87,7 +95,7 @@ public class AdminInterface {
         return scanner.next();
     }
     //_________________________________________________________________________________________________
-    public ProductCategory addProductsAndCategories(boolean loop) {
+    public ProductCategory addProductsAndCategories() {
         addFirstCategory();
         listCategoriesToAdd();
 
@@ -96,7 +104,7 @@ public class AdminInterface {
             if (Integer.parseInt(userChoice) == 1)
                 createNewCategory(scanner);
             else if (userChoice.equals("e"))
-                start(loop);
+                start();
             else
                 return chosenCategory(Integer.parseInt(userChoice) - 2);
 

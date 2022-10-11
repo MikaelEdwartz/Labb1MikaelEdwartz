@@ -3,12 +3,25 @@ package se.iths.labborationer.labb2;
 import java.math.BigDecimal;
 import java.util.function.Predicate;
 
-public record Product(ProductCategory category, String product, BigDecimal price, int productNumber) implements Predicate<Product> {
+public final class Product implements Predicate<Product> {
+    private final ProductCategory category;
+    private final String product;
+    private final BigDecimal price;
+    private final int productNumber;
+
+    public Product(ProductCategory category, String product, BigDecimal price, int productNumber) {
+        this.category = category;
+        this.product = product;
+        this.price = price;
+        this.productNumber = productNumber;
+    }
+
     public boolean matchingEanCode(int productNumber) {
         return this.productNumber == productNumber;
     }
-    public String toString(){
-        return category + "\t\t" + product + "\t\t"  + price + "kr \t\t" + productNumber + "\t\t";
+
+    public String toString() {
+        return category + "\t" + product + "\t" + price + "kr \t" + productNumber + "";
     }
 
     @Override
@@ -37,4 +50,21 @@ public record Product(ProductCategory category, String product, BigDecimal price
     public boolean test(Product product) {
         return false;
     }
+
+    public ProductCategory category() {
+        return category;
+    }
+
+    public String product() {
+        return product;
+    }
+
+    public BigDecimal price() {
+        return price;
+    }
+
+    public int productNumber() {
+        return productNumber;
+    }
+
 }

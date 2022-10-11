@@ -1,6 +1,7 @@
 package se.iths.labborationer.labb2;
 
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +50,10 @@ public class InventoryBalance {
         return this.inventory.get(i).category();
     }
 
+    public List<Product> copy(InventoryBalance inventory){
+       return this.inventory = new ArrayList<>(inventory.getInventory());
 
+    }
 
     public void printProductWithCategory(ProductCategory category){
         System.out.println("Kategori \t Produkt \t\t Pris \t Artikelnummer");

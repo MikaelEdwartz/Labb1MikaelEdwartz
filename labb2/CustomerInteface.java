@@ -1,6 +1,12 @@
 package se.iths.labborationer.labb2;
 
+import com.google.gson.Gson;
+import org.w3c.dom.CDATASection;
+
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,22 +14,26 @@ import java.util.Scanner;
 import static java.math.BigDecimal.valueOf;
 
 public class CustomerInteface{
-    private InventoryBalance balance;
-    private List<ProductCategory> categories;
-    private Scanner scanner;
+    private final InventoryBalance balance;
+    private final List<ProductCategory> categories;
+    private final Scanner scanner;
     private int count;
-    private Register register;
+    private final Register register;
+    private final Menu menu;
+    private final JsonReader reader;
 
-    public CustomerInteface(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner) {
+
+    public CustomerInteface(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner, Menu menu, JsonReader reader) {
         this.balance = balance;
         this.categories = categories;
         this.scanner = scanner;
         this.register = new Register();
-
+        this.menu = menu;
+        this.reader = reader;
     }
 
     public void start(boolean loop) {
-        startupkategorier();
+
         while (loop) {
 
             costumerMenuGreeting();
@@ -35,7 +45,8 @@ public class CustomerInteface{
                 case "2" -> getSpecificCategor(register);
                 case "3" -> listAllProducts(register);
                 case "4" -> register.printRegister();
-                case "5" -> checkOut(register);
+                case "5" -> checkOut(register, loop);
+                case "6" -> menu.start();
                 case "e" -> loop = false;
 
             }
@@ -157,7 +168,7 @@ public class CustomerInteface{
 
     //__________________________________________________________________________________
 
-    private void checkOut(Register register) {
+    private void checkOut(Register register, Boolean loop) {
 
 
         var distinctRegister = new Register(register.getDistinctRegister(register.register));
@@ -188,7 +199,18 @@ public class CustomerInteface{
 
         removeRegisterItemsFromBalance();
 
+        reader.save(this.balance);
+
+        System.out.println("Tack för ditt köp, välkommen åter!");
+        System.exit(0);
     }
+
+
+
+
+
+
+
 
     private BigDecimal getDiscountedPrice(BigDecimal priceToPay, BigDecimal discountedPrice) {
         if(priceToPay.compareTo(valueOf(2000)) > 0)

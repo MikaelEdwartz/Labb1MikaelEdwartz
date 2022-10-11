@@ -1,5 +1,7 @@
 package se.iths.labborationer.labb2;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,15 +11,22 @@ public class Menu {
     private final Scanner scanner;
     private final CustomerInteface costumerInterface;
     private final AdminInterface adminInterface;
+    private final Menu menu;
+    private final JsonReader gson;
+    private InventoryBalance balance;
 
 
-    public Menu(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner) {
+    public Menu(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner, JsonReader gson) {
         this.scanner = scanner;
-        costumerInterface = new CustomerInteface(balance, categories, scanner);
-        adminInterface = new AdminInterface(balance, categories, scanner);
+        this.menu = this;
+        this.balance = balance;
+        this.gson = new JsonReader(this.balance, categories);
+        costumerInterface = new CustomerInteface(this.balance, categories, scanner, menu, this.gson);
+        adminInterface = new AdminInterface(this.balance, categories, scanner, menu, this.gson);
     }
 
     public void start() {
+        gson.add();
         boolean loop = true;
         startUpGreeting();
         startUpMenu(loop);
@@ -35,13 +44,12 @@ public class Menu {
         while (loop) {
             var input = scanner.next();
             switch (input) {
-                case "1" -> adminInterface.start(loop);
+                case "1" -> adminInterface.start();
                 case "2" -> costumerInterface.start(loop);
                 case "e" -> loop = false;
             }
         }
     }
-
 }
 
 
