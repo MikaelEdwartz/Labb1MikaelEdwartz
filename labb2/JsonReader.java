@@ -48,14 +48,13 @@ public class JsonReader {
 //        }
 //
         try {
-            FileReader fileReader1 = new FileReader("products.json");
+            FileReader fileReader1 = new FileReader("products.txt");
             var getTypeList = new TypeToken<InventoryBalance>() {
             }.getType();
-            System.out.println("Import of fruit products successful");
+
             return gson.fromJson(fileReader1, getTypeList);
 
         } catch (FileNotFoundException e) {
-            System.out.println("File of products not found continues without import.");
             return balance;
         }
 
