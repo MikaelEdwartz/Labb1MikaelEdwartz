@@ -12,7 +12,7 @@ public class Main {
         var balance = new InventoryBalance();
         var scanner = new Scanner(System.in);
         var reader = new JsonReader(balance, categories);
-        var menu = new Menu(balance, categories, scanner, reader);
+        var menu = new Menu(reader.read(balance), categories, scanner, reader);
         menu.start();
 
     }

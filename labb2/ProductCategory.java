@@ -9,28 +9,32 @@ public final class ProductCategory {
         this.category = category;
     }
 
-
     @Override
     public String toString() {
-        return category;
+        return "ProductCategory{" +
+                "category='" + category + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProductCategory that = (ProductCategory) o;
+
+        return Objects.equals(category, that.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return category != null ? category.hashCode() : 0;
     }
 
     public String category() {
         return category;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ProductCategory) obj;
-        return Objects.equals(this.category, that.category);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(category);
-    }
 
 
 }

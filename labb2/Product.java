@@ -1,6 +1,7 @@
 package se.iths.labborationer.labb2;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public final class Product implements Predicate<Product> {
@@ -20,8 +21,14 @@ public final class Product implements Predicate<Product> {
         return this.productNumber == productNumber;
     }
 
+    @Override
     public String toString() {
-        return category + "\t" + product + "\t" + price + "kr \t" + productNumber + "";
+        return "Product{" +
+                "category=" + category +
+                ", product='" + product + '\'' +
+                ", price=" + price +
+                ", productNumber=" + productNumber +
+                '}';
     }
 
     @Override
@@ -32,16 +39,16 @@ public final class Product implements Predicate<Product> {
         Product product1 = (Product) o;
 
         if (productNumber != product1.productNumber) return false;
-        if (!category.equals(product1.category)) return false;
-        if (!product.equals(product1.product)) return false;
-        return price.equals(product1.price);
+        if (!Objects.equals(category, product1.category)) return false;
+        if (!Objects.equals(product, product1.product)) return false;
+        return Objects.equals(price, product1.price);
     }
 
     @Override
     public int hashCode() {
-        int result = category.hashCode();
-        result = 31 * result + product.hashCode();
-        result = 31 * result + price.hashCode();
+        int result = category != null ? category.hashCode() : 0;
+        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + productNumber;
         return result;
     }

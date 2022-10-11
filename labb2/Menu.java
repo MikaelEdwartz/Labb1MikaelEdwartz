@@ -26,7 +26,7 @@ public class Menu {
     }
 
     public void start() {
-        gson.add();
+
         boolean loop = true;
         startUpGreeting();
         startUpMenu(loop);
