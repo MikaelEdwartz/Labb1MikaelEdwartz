@@ -23,10 +23,46 @@ public final class Product implements Predicate<Product> {
 
     @Override
     public String toString() {
-        return category + ", " + product + ", "  + price +   ", " + productNumber;
+        return formatedtoString(category.category(), false) + "" + formatedtoString(product, false)+ price +   "kr "+ printTab(1) + productNumber + printTab(1);
+    }
+    public String toStringCustomer(){
+        return formatedtoString(category.category(), true) + "" + formatedtoString(product, false)+ price +   "kr "+ printTab(2) + productNumber + printTab(2);
+    }
+
+    public String formatedtoString(String item, boolean nrBeforeProduct){
+            int length = item.length();
+            if(nrBeforeProduct)
+                return printFirstTab(item, length);
+             else
+                return printTab(item, length);
 
     }
 
+    private String printFirstTab(String item, int length) {
+        if (length >=6)
+            return item + printTab(2);
+        return item + printTab(3);
+    }
+
+
+    private String printTab(String item, int length) {
+        if (length >= 14)
+            return item + printTab(1);
+        if (length >= 8)
+            return item + printTab(2);
+
+        return item + printTab(3);
+    }
+
+    private String printTab(int nrOfTabs){
+        String tabs = "";
+        for (int j = 0; j < nrOfTabs; j++) {
+            tabs = tabs + "\t";
+        }
+
+        return tabs;
+
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,5 +105,6 @@ public final class Product implements Predicate<Product> {
     public int productNumber() {
         return productNumber;
     }
+
 
 }

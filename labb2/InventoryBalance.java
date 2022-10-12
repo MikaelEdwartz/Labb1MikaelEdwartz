@@ -3,8 +3,11 @@ package se.iths.labborationer.labb2;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InventoryBalance {
@@ -14,40 +17,44 @@ public class InventoryBalance {
         this.inventory = new ArrayList<>();
     }
 
-    public InventoryBalance(ArrayList<Product> list){
-        this.inventory = new ArrayList<>(list);
-    }
-    public InventoryBalance(InventoryBalance list){
-        this.inventory = new ArrayList<>(list.getInventory());
-    }
-    public InventoryBalance(List<Product> list){
+    public InventoryBalance(ArrayList<Product> list) {
         this.inventory = new ArrayList<>(list);
     }
 
-    public void add(Product product){
+    public InventoryBalance(InventoryBalance list) {
+        this.inventory = new ArrayList<>(list.getInventory());
+    }
+
+    public InventoryBalance(List<Product> list) {
+        this.inventory = new ArrayList<>(list);
+    }
+
+    public void add(Product product) {
         this.inventory.add(product);
     }
 
-    public void remove(int i){
+    public void remove(int i) {
         this.inventory.remove(this.getProduct(i));
     }
 
-    public void remove(Product product){
+    public void remove(Product product) {
         this.inventory.remove(product);
     }
 
-    public void remove(String name){
+    public void remove(String name) {
         this.inventory.removeIf(product -> product.product().equals(name));
     }
-    public boolean contains(Product product){
+
+    public boolean contains(Product product) {
         return this.inventory.stream()
                 .anyMatch(p -> p.equals(product));
     }
 
-    public List<Product> listToRemove(String name){
+    public List<Product> listToRemove(String name) {
         return this.inventory.stream().filter(p -> p.product().equals(name)).toList();
     }
-    public List<Product> listToRemove(String name, long limit){
+
+    public List<Product> listToRemove(String name, long limit) {
         return this.inventory.stream().limit(limit).filter(p -> p.product().equals(name)).toList();
     }
 
@@ -56,55 +63,66 @@ public class InventoryBalance {
     }
 
 
-    public Product getProduct(int i){
+    public Product getProduct(int i) {
         return this.inventory.get(i);
     }
 
 
-
-    public ProductCategory getCategory(int i){
+    public ProductCategory getCategory(int i) {
         return this.inventory.get(i).category();
     }
 
-    public List<Product> copy(InventoryBalance inventory){
-       return this.inventory = new ArrayList<>(inventory.getInventory());
+    public List<Product> copy(InventoryBalance inventory) {
+        return this.inventory = new ArrayList<>(inventory.getInventory());
 
     }
 
-    public void printProductWithCategory(ProductCategory category){
-        System.out.println("Kategori \t Produkt \t\t Pris \t Artikelnummer");
+    public void printProductWithCategory(ProductCategory category) {
+        //admin4
         this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
                 .distinct()
+                .sorted(Comparator.comparing(compareCategoryOrder())
+                        .thenComparing(Product::product))
                 .forEach(this::printProductSaldo);
     }
 
-    public List<Product> getListWithChosenCategory(ProductCategory category){
+    public List<Product> getListWithChosenCategory(ProductCategory category) {
         return this.inventory.stream()
                 .filter(p -> productMatch(p.category(), category))
                 .distinct()
-                 .toList();
+                .sorted(Comparator.comparing(compareCategoryOrder())
+                        .thenComparing(Product::product))
+                .toList();
     }
 
-    public long nrOfProducts(Product number){
+    public long nrOfProducts(Product number) {
         return this.inventory.stream()
                 .filter(product -> product.matchingEanCode(number.productNumber()))
                 .count();
     }
 
 
-    public boolean productMatch(ProductCategory p ,ProductCategory o){
+    public boolean productMatch(ProductCategory p, ProductCategory o) {
         return p.category().equals(o.category());
     }
 
-    public void printBetweenPrices(BigDecimal lowestInputPrice, BigDecimal highestInputPrice){
-            BigDecimal lowestPrice = lowestInputPrice;
-            BigDecimal highestPrice = highestInputPrice;
-            this.inventory.stream().filter(p-> isLowerThan(highestPrice, p))
-                            .filter(p -> isHigherThan(lowestPrice, p))
-                            .distinct()
-                            .forEach(this::printProductSaldo);
-        }
+    public void printBetweenPrices(BigDecimal lowestInputPrice, BigDecimal highestInputPrice) {
+        //admin5
+
+        BigDecimal lowestPrice = lowestInputPrice;
+        BigDecimal highestPrice = highestInputPrice;
+        this.inventory.stream().filter(p -> isLowerThan(highestPrice, p))
+                .filter(p -> isHigherThan(lowestPrice, p))
+                .distinct()
+                .sorted(Comparator.comparing(compareCategoryOrder())
+                        .thenComparing(Product::product))
+                .forEach(this::printProductSaldo);
+    }
+
+    public static Function<Product, String> compareCategoryOrder() {
+        return product -> product.category().category();
+    }
 
     private static boolean isLowerThan(BigDecimal highestPrice, Product p) {
         return p.price().compareTo(highestPrice) <= 0;
@@ -114,24 +132,29 @@ public class InventoryBalance {
         return p.price().compareTo(lowestPrice) >= 0;
     }
 
-    public void printBalance(){
+    public void printBalance() {
         this.inventory.forEach(System.out::println);
     }
 
-    public void printbalancetest(){
+    public void printbalancetest() {
+        //admin3
         inventory.stream()
                 .distinct()
+                .sorted(Comparator.comparing(compareCategoryOrder())
+                        .thenComparing(Product::product))
                 .forEach(p -> printProductSaldo(p));
 
     }
 
     private void printProductSaldo(Product p) {
-        System.out.println(p + " " +  nrOfProducts(p) + " st i lager");
+        System.out.println(p + " " + nrOfProducts(p) + " st i lager");
     }
 
-    public List<Product> getDistinctProducts(List<Product> listIn){
+    public List<Product> getDistinctProducts(List<Product> listIn) {
         return listIn
                 .stream()
+                .sorted(Comparator.comparing(compareCategoryOrder())
+                        .thenComparing(Product::product))
                 .distinct()
                 .toList();
     }
@@ -139,7 +162,7 @@ public class InventoryBalance {
     public String printBalance(int i) {
         return this.inventory.get(i).category() + ", "
                 + this.inventory.get(i).product() + ", "
-                + this.inventory.get(i).price() +   ", "
+                + this.inventory.get(i).price() + ", "
                 + this.inventory.get(i).productNumber();
     }
 
@@ -150,6 +173,7 @@ public class InventoryBalance {
     public int size() {
         return inventory.size();
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -164,16 +188,14 @@ public class InventoryBalance {
     }
 
 
+    public void getLongestCategory() {
+        int i = this.inventory.stream()
+                .map(Product::category)
+                .map(ProductCategory::category)
+                .collect(Collectors.summarizingInt(String::length))
+                .getMax();
+    }
 }
-
-
-
-
-
-
-
-
-
 
 
 //    public List<String> getAllCategories(){

@@ -37,6 +37,7 @@ public class AdminInterface {
                 case "4" -> printCategory(getUserCategoryChoice(1));
                 case "5" -> searchBetweenPrices();
                 case "6" -> menu.start();
+                case "7" -> startupkategorier();
                 case "e" -> loop = false;
             }
             adminMenuGreeting();
@@ -56,23 +57,23 @@ public class AdminInterface {
     }
 
     public void startupkategorier() {
-        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.inventory.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
-        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.inventory.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10));
-        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.inventory.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
-        this.inventory.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
-        this.inventory.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
-        this.inventory.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
+        this.inventory.add(new Product(new ProductCategory("Mejeri"), "Mjölk", valueOf(16), 10938));
+        this.inventory.add(new Product(new ProductCategory("Mejeri"), "Mjölk", valueOf(16), 10938));
+        this.inventory.add(new Product(new ProductCategory("Mejeri"), "Mjölk", valueOf(16), 10938));
+        this.inventory.add(new Product(new ProductCategory("Mejeri"), "Mjölk", valueOf(16), 10938));
+        this.inventory.add(new Product(new ProductCategory("Mejeri"), "Mjölk", valueOf(16), 10938));
+        this.inventory.add(new Product(new ProductCategory("Mejeri"), "Grädde", valueOf(11), 10958));
+        this.inventory.add(new Product(new ProductCategory("Kött"), "Kyckling", valueOf(67), 19452));
+        this.inventory.add(new Product(new ProductCategory("Kött"), "Kyckling", valueOf(67), 19452));
+        this.inventory.add(new Product(new ProductCategory("Kött"), "Kyckling", valueOf(67), 19452));
+        this.inventory.add(new Product(new ProductCategory("Kött"), "Köttfärs", valueOf(70), 10512));
+        this.inventory.add(new Product(new ProductCategory("Frukt"), "Äpple", valueOf(7), 83713));
+        this.inventory.add(new Product(new ProductCategory("Frukt"), "Äpple", valueOf(7), 83713));
+        this.inventory.add(new Product(new ProductCategory("Frukt"), "Äpple", valueOf(7), 83713));
+        this.inventory.add(new Product(new ProductCategory("Grönsaker"), "Morötter", valueOf(23), 12845));
+        this.inventory.add(new Product(new ProductCategory("Grönsaker"), "Morötter", valueOf(23), 12845));
+        this.inventory.add(new Product(new ProductCategory("Frukt"), "Banan", valueOf(6), 86437));
+        this.inventory.add(new Product(new ProductCategory("Frukt"), "Banan", valueOf(6), 86437));
 
         for (int i = 0; i < this.inventory.size(); i++) {
             if (!(this.categoryList.contains(this.inventory.getCategory(i))))
@@ -157,13 +158,13 @@ public class AdminInterface {
     }
 
     private String removeAllProductsChoice() {
-        System.out.println("Vill du radera alla varor? (Y/N)");
+        System.out.println("Vill du radera alla varor? (J/N)");
         String choice = scanner.next();
         return choice;
     }
 
     private void removeOption(String input, String choice) {
-        if(choice.equals("Y"))
+        if(choice.equals("J"))
             this.inventory.remove(input);
         else
             removeMultipleProducts(input);
@@ -171,7 +172,7 @@ public class AdminInterface {
 
     private void removeMultipleProducts(String input) {
         System.out.println("Hur många vill du ta bort?");
-        long nrToRemove = Integer.parseInt(scanner.next());
+        long nrToRemove = Long.parseLong(scanner.next());
         var listOfProductsToRemove = this.inventory.listToRemove(input, nrToRemove);
 
         removeFromList(listOfProductsToRemove);
@@ -191,6 +192,7 @@ public class AdminInterface {
     }
     //_________________________________________________________________________________________________
     private void printProducts() {
+
         this.inventory.printbalancetest();
     }
     //_________________________________________________________________________________________________

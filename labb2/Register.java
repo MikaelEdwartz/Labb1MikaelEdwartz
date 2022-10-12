@@ -1,6 +1,7 @@
 package se.iths.labborationer.labb2;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Register {
@@ -19,14 +20,18 @@ public class Register {
     public Product getProduct(int i ){
         return this.register.get(i);
     }
+
     public void printRegister(){
+
             this.register.stream()
                     .distinct()
+                    .sorted(Comparator.comparing(InventoryBalance.compareCategoryOrder())
+                            .thenComparing(Product::product))
                     .forEach(this::printProductsInRegister);
     }
 
     private void printProductsInRegister(Product p) {
-        System.out.println(p + " " + sameProductsInRegister(p));
+        System.out.println(p + " " + sameProductsInRegister(p) + " st");
     }
 
     public long sameProductsInRegister(Product productN){

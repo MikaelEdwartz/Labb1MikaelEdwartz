@@ -1,13 +1,6 @@
 package se.iths.labborationer.labb2;
 
-import com.google.gson.Gson;
-import org.w3c.dom.CDATASection;
-
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -44,7 +37,7 @@ public class CustomerInteface{
                 case "1" -> loopThroughCategories(register);
                 case "2" -> getSpecificCategor(register);
                 case "3" -> listAllProducts(register);
-                case "4" -> register.printRegister();
+                case "4" -> printRegister();
                 case "5" -> checkOut(register, loop);
                 case "6" -> menu.start();
                 case "e" -> loop = false;
@@ -53,12 +46,18 @@ public class CustomerInteface{
             System.out.println("====================");
         }
     }
+
+    private void printRegister() {
+        printHeader(1);
+        register.printRegister();
+    }
+
     private void costumerMenuGreeting() {
         System.out.println("1. Vill gå igenom alla kategorier en i taget?");
         System.out.println("2. Välj en specifik kategori");
         System.out.println("3. Printa ut alla produkter");
         System.out.println("4. print your register");
-        System.out.println("e. Gå till kassan och betala");
+        System.out.println("5. Gå till kassan och betala");
     }
 
     private void loopThroughCategories(Register register) {
@@ -77,22 +76,28 @@ public class CustomerInteface{
         }
     }
     private void printProductsInStore(Register register, InventoryBalance list) {
+        printHeader(0);
         this.count = 1;
         for (int i = 0; i < list.size(); i++) {
-            System.out.println((i + 1) + " " + list.getProduct(i) + " " + actualProductsInStore(list, register, i));
+            System.out.println((i + 1) + " " + list.getProduct(i).toStringCustomer() + " " + actualProductsInStore(list, register, i) + "st");
             count++;
         }
         System.out.println(count + " För att gå tillbaka");
     }
+
+    private void printHeader(int i) {
+        System.out.println("Kategori" + printTab(2) + "Varunamn" + printTab(2) + "Pris" + printTab(2 -i) + "EAN-kod" + printTab(2-i) + "Lagersaldo" );
+    }
+
     private int getProductOrQuit() {
-        int choice = getChoice("Skriv siffran på produkten du vill ha eller gå tillbaka.");
+        int choice = getChoice();
         if (choice == count)
             start(true);
         return choice;
     }
 
     private void askAndAddProduct(Register register, InventoryBalance list, int choice) {
-        long nrOfProducts = getNrOfProducts("Hur många vill du köpa?");
+        long nrOfProducts = getNrOfProducts();
 
         if(isProductAvailable(register, list, choice, nrOfProducts))
             addNrOfProductsToRegister(register, list, choice, nrOfProducts);
@@ -108,13 +113,13 @@ public class CustomerInteface{
         return produtsInStore;
     }
 
-    private int getChoice(String x) {
-        System.out.println(x);
+    private int getChoice() {
+        System.out.println("Skriv siffran på produkten du vill ha eller gå tillbaka.");
         int choice = scanner.nextInt();
         return choice;
     }
-    private long getNrOfProducts(String x) {
-        System.out.println(x);
+    private long getNrOfProducts() {
+        System.out.println("Hur många vill du köpa?");
         long nrOfProducts = scanner.nextInt();
         return nrOfProducts;
     }
@@ -177,12 +182,13 @@ public class CustomerInteface{
 
         for (int i = 0; i < distinctRegister.size(); i++) {
 
-            System.out.println(distinctRegister.getProduct(i).product()
-                 + printTab(3) + distinctRegister.getProduct(i).price()
-                 + printTab(3) + nrOfProducts(distinctRegister.getProduct(i))
-                 + printTab(2) + totalPrice(distinctRegister.getProduct(i)));
+            System.out.println(getProduct(distinctRegister, i).product()
+                 + printTab(getNrOfTabs(getProduct(distinctRegister, i))) + getProduct(distinctRegister, i).price()
+                 + printTab(3) + nrOfProducts(getProduct(distinctRegister, i))
+                 + "st" + printTab(3) + totalPrice(getProduct(distinctRegister, i))
+                 + "kr");
 
-         priceToPay = priceToPay.add(totalPrice(distinctRegister.getProduct(i)));
+         priceToPay = priceToPay.add(totalPrice(getProduct(distinctRegister, i)));
 
         }
         System.out.println();
@@ -205,11 +211,21 @@ public class CustomerInteface{
         System.exit(0);
     }
 
+    private static Product getProduct(Register distinctRegister, int i) {
+        return distinctRegister.getProduct(i);
+    }
 
+    private static int getNrOfTabs(Product product) {
+        int length = product.product().length();
+        if(length >= 12)
+            return 1;
+        if(length >=8)
+            return 2;
+        if(length >= 4)
+            return 3;
 
-
-
-
+        return 0;
+    }
 
 
     private BigDecimal getDiscountedPrice(BigDecimal priceToPay, BigDecimal discountedPrice) {
@@ -258,7 +274,7 @@ public class CustomerInteface{
     }
     private void removeRegisterItemsFromBalance(){
         for (int i = 0; i < register.size(); i++)
-            this.balance.remove(this.register.getProduct(i));
+            this.balance.remove(getProduct(this.register, i));
 
     }
 

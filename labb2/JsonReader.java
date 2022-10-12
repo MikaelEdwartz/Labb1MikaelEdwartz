@@ -43,7 +43,7 @@ public class JsonReader {
 
                 return new InventoryBalance();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println(e.getMessage());;
             }
         }
 

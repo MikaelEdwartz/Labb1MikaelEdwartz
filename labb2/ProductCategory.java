@@ -29,7 +29,7 @@ public final class ProductCategory {
         return category != null ? category.hashCode() : 0;
     }
 
-    public String category() {
+    public  String category() {
         return category;
     }
 
