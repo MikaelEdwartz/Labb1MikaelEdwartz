@@ -12,7 +12,13 @@ public class InventoryBalance {
 
     public InventoryBalance() {
         this.inventory = new ArrayList<>();
+    }
 
+    public InventoryBalance(ArrayList<Product> list){
+        this.inventory = new ArrayList<>(list);
+    }
+    public InventoryBalance(InventoryBalance list){
+        this.inventory = new ArrayList<>(list.getInventory());
     }
     public InventoryBalance(List<Product> list){
         this.inventory = new ArrayList<>(list);
@@ -30,15 +36,25 @@ public class InventoryBalance {
         this.inventory.remove(product);
     }
 
+    public void remove(String name){
+        this.inventory.removeIf(product -> product.product().equals(name));
+    }
     public boolean contains(Product product){
         return this.inventory.stream()
                 .anyMatch(p -> p.equals(product));
     }
 
+    public List<Product> listToRemove(String name){
+        return this.inventory.stream().filter(p -> p.product().equals(name)).toList();
+    }
+    public List<Product> listToRemove(String name, long limit){
+        return this.inventory.stream().limit(limit).filter(p -> p.product().equals(name)).toList();
+    }
 
     public List<Product> getInventory() {
         return inventory;
     }
+
 
     public Product getProduct(int i){
         return this.inventory.get(i);

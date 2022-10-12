@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +21,8 @@ public class JsonReader {
     private final List<ProductCategory> categories;
     private String data;
 
-    public JsonReader(InventoryBalance balance, List<ProductCategory> categories){
+
+    public JsonReader(List<ProductCategory> categories){
         this.gson = new Gson();
         this.balance = balance;
         this.categories = categories;
@@ -29,36 +31,43 @@ public class JsonReader {
     }
 
 
-    public InventoryBalance read(InventoryBalance balance){
-//        String folder = System.getProperty("user.home");
-//        Path store = Path.of(folder, "KortedalaAffär", "products.txt");
-//        Path filePath = store;
-//        boolean exist = Files.exists(filePath);
-//       // if (jsonObj != null && jsonObj.length > 0)
-//        if(exist) {
-//            try {
-//                var list = this.balance.copy(new InventoryBalance(gson.fromJson(data, new TypeToken<ArrayList<Product>>() {
-//                }.getType())));
-//                for (int i = 0; i < list.size(); i++) {
-//                    this.balance.add(list.get(i));
-//                }
-//            } catch (Exception e) {
-//                System.out.println(e.getMessage());
-//            }
-//        }
-//
-        try {
-            FileReader fileReader1 = new FileReader("products.txt");
-            var getTypeList = new TypeToken<InventoryBalance>() {
-            }.getType();
+    public InventoryBalance read(){
+        String folder = System.getProperty("user.home");
+        Path store = Path.of(folder, "KortedalaAffär", "products.txt");
+        Path filePath = store;
+        boolean exist = Files.exists(filePath);
 
-            return gson.fromJson(fileReader1, getTypeList);
+        if(!(exist)) {
+            try {
+                Files.createDirectory(Path.of(folder, "KortedalaAffär"));
 
-        } catch (FileNotFoundException e) {
-            return balance;
+                return new InventoryBalance();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 
+
+        try (Reader reader = new FileReader(store.toFile())) {
+
+            Type getTypeList = new TypeToken<ArrayList<Product>>() {}.getType();
+            List<Product> list = gson.fromJson(reader, getTypeList);
+            var b = new InventoryBalance(list);
+            addCategories(b);
+            return b;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    return new InventoryBalance();
+    }
+
+    private void addCategories(InventoryBalance b) {
+        for (int i = 0; i < b.size(); i++) {
+            if (!(this.categories.contains(b.getCategory(i))))
+                this.categories.add(b.getCategory(i));
+        }
     }
 
     public void save(InventoryBalance balance){
@@ -69,8 +78,8 @@ public class JsonReader {
         Path filePath = store;
         boolean exist = Files.exists(filePath);
         try {
-            if(!(exist))
-                Files.createDirectory(Path.of(folder, "KortedalaAffär"));
+//            if(!(exist))
+//                Files.createDirectory(Path.of(folder, "KortedalaAffär"));
 
             Files.writeString(store, data);
 

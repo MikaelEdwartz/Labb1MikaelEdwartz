@@ -23,12 +23,8 @@ public final class Product implements Predicate<Product> {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "category=" + category +
-                ", product='" + product + '\'' +
-                ", price=" + price +
-                ", productNumber=" + productNumber +
-                '}';
+        return category + ", " + product + ", "  + price +   ", " + productNumber;
+
     }
 
     @Override

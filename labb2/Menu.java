@@ -20,7 +20,7 @@ public class Menu {
         this.scanner = scanner;
         this.menu = this;
         this.balance = balance;
-        this.gson = new JsonReader(this.balance, categories);
+        this.gson = new JsonReader(categories);
         costumerInterface = new CustomerInteface(this.balance, categories, scanner, menu, this.gson);
         adminInterface = new AdminInterface(this.balance, categories, scanner, menu, this.gson);
     }

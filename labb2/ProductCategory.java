@@ -11,9 +11,7 @@ public final class ProductCategory {
 
     @Override
     public String toString() {
-        return "ProductCategory{" +
-                "category='" + category + '\'' +
-                '}';
+        return this.category;
     }
 
     @Override

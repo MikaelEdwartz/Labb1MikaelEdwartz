@@ -27,7 +27,7 @@ public class AdminInterface {
 
     public void start() {
 
-        boolean loop = true;
+       boolean loop = true;
        while (loop) {
             var input = scanner.nextLine();
             switch (input) {
@@ -50,6 +50,7 @@ public class AdminInterface {
         System.out.println("3: Printa ut lagersaldo");
         System.out.println("4: Sök via kategori");
         System.out.println("5: Sök inom ett prisintervall");
+        System.out.println("6: Gå tillbaka till menyn");
         System.out.println("e: Avsluta");
 
     }
@@ -143,30 +144,46 @@ public class AdminInterface {
 
 //_________________________________________________________________________________________________
     private void removeProduct() {
-    System.out.println("Välj vilken kategori du vill radera en vara från.");
-
-    List<Integer> productsToRemoveList = getProductIndexes();
-    int productToRemove = Integer.parseInt(getChoice());
-    this.inventory.remove(productsToRemoveList.get(productToRemove - 1));
-
-}
-    private ArrayList<Integer> getProductIndexes() {
-        var category = getUserCategoryChoice(1);
-        var tempList = new ArrayList<Integer>();
-        int count = 1;
-        printMatchingProductsAndAddToLoop(category, tempList, count);
-        return tempList;
+        getCategoryAndPrintProducts();
+        System.out.println("Skriv namnet på varan du vill ta bort");
+        String input = scanner.next();
+        String choice = removeAllProductsChoice();
+        removeOption(input, choice);
     }
 
-    private void printMatchingProductsAndAddToLoop(ProductCategory category, ArrayList<Integer> tempList, int count) {
-        for (int i = 0; i < this.inventory.size(); i++) {
-            if (categoryMatch(category, i)) {
-                System.out.println(count + " " + this.inventory.printBalance(i));
-                tempList.add(i);
-                count++;
-            }
-        }
+    private void getCategoryAndPrintProducts() {
+        System.out.println("Välj vilken kategori du vill radera en vara från.");
+        this.inventory.printProductWithCategory(getUserCategoryChoice(1));
     }
+
+    private String removeAllProductsChoice() {
+        System.out.println("Vill du radera alla varor? (Y/N)");
+        String choice = scanner.next();
+        return choice;
+    }
+
+    private void removeOption(String input, String choice) {
+        if(choice.equals("Y"))
+            this.inventory.remove(input);
+        else
+            removeMultipleProducts(input);
+    }
+
+    private void removeMultipleProducts(String input) {
+        System.out.println("Hur många vill du ta bort?");
+        long nrToRemove = Integer.parseInt(scanner.next());
+        var listOfProductsToRemove = this.inventory.listToRemove(input, nrToRemove);
+
+        removeFromList(listOfProductsToRemove);
+    }
+
+    private void removeFromList(List<Product> tempList) {
+        for (int i = 0; i < tempList.size(); i++) {
+        this.inventory.remove(tempList.get(i));
+    }
+    }
+
+
 
     private String getChoice() {
         System.out.println("Välj vilken vara du vill ta bort från lagret");
