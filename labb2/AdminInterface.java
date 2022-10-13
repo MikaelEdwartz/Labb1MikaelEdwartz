@@ -146,7 +146,7 @@ public class AdminInterface {
 //_________________________________________________________________________________________________
     private void removeProduct() {
         getCategoryAndPrintProducts();
-        System.out.println("Skriv namnet på varan du vill ta bort");
+        System.out.println("Skriv in produktnamnet på varan du vill ta bort");
         String input = scanner.next();
         String choice = removeAllProductsChoice();
         removeOption(input, choice);
@@ -192,11 +192,17 @@ public class AdminInterface {
     }
     //_________________________________________________________________________________________________
     private void printProducts() {
-
+        printHeader();
         this.inventory.printbalancetest();
     }
+
+    private void printHeader() {
+        System.out.println("Kategori" + printTab(2) + "Varunamn" + printTab(2) + "Pris" + printTab(1) + "EAN-kod" + printTab(2) + " lagersaldo" );
+    }
+
     //_________________________________________________________________________________________________
     private void printCategory(ProductCategory category) {
+        printHeader();
         this.inventory.printProductWithCategory(category);
     }
     private ProductCategory getUserCategoryChoice(int number) {
@@ -211,6 +217,7 @@ public class AdminInterface {
     public void searchBetweenPrices() {
         BigDecimal lowestPrice = getLowestSearchPrice();
         BigDecimal highestPrice = getHighestSearchPrice();
+        printHeader();
         this.inventory.printBetweenPrices(lowestPrice, highestPrice);
     }
     private BigDecimal getHighestSearchPrice() {
@@ -228,7 +235,15 @@ public class AdminInterface {
 
 
 
+    private String printTab(int nrOfTabs){
+        String tabs = "";
+        for (int j = 0; j < nrOfTabs; j++) {
+            tabs = tabs + "\t";
+        }
 
+        return tabs;
+
+    }
 
 
 }

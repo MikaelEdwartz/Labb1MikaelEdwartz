@@ -47,8 +47,10 @@ public class CustomerInteface{
         }
     }
 
+
+
     private void printRegister() {
-        printHeader(1);
+        System.out.println("Din varukorg består av:");
         register.printRegister();
     }
 

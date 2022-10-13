@@ -1,8 +1,5 @@
 package se.iths.labborationer.labb2;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,34 +9,22 @@ public class Menu {
     private final CustomerInteface costumerInterface;
     private final AdminInterface adminInterface;
     private final Menu menu;
-    private final JsonReader gson;
-    private InventoryBalance balance;
+    private final InventoryBalance balance;
 
 
-    public Menu(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner, JsonReader gson) {
+    public Menu(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner, JsonReader reader) {
         this.scanner = scanner;
         this.menu = this;
         this.balance = balance;
-        this.gson = new JsonReader(categories);
-        costumerInterface = new CustomerInteface(this.balance, categories, scanner, menu, this.gson);
-        adminInterface = new AdminInterface(this.balance, categories, scanner, menu, this.gson);
+        costumerInterface = new CustomerInteface(this.balance, categories, scanner, this.menu, reader);
+        adminInterface = new AdminInterface(this.balance, categories, this.scanner, this.menu, reader);
     }
 
     public void start() {
-
         boolean loop = true;
         startUpGreeting();
         startUpMenu(loop);
     }
-
-
-    private void startUpGreeting() {
-        System.out.println("Tryck 1 för admin meny");
-        System.out.println("Tryck 2 för kund meny");
-        System.out.println("Tryck e för att avsluta.");
-    }
-
-
     private void startUpMenu(boolean loop) {
         while (loop) {
             var input = scanner.next();
@@ -49,6 +34,28 @@ public class Menu {
                 case "e" -> loop = false;
             }
         }
+    }
+
+    private void startUpGreeting() {
+        if(inventoryIsEmpty())
+            firstGreeting();
+        printGreeting();
+    }
+
+    private static void printGreeting() {
+        System.out.println("Välkommen! vänligen logga in genom att välja ett alternativ nedan.");
+        System.out.println("Tryck 1 för att logga in som admin");
+        System.out.println("Tryck 2 för att börja shoppa");
+        System.out.println("Tryck e för att avsluta.");
+    }
+
+    private boolean inventoryIsEmpty() {
+        return this.balance.getInventory().isEmpty();
+    }
+
+    private void firstGreeting(){
+        System.out.println("Det verkar som att din affär öppnas för första gången. Du dirigeras vidare till admin menyn!");
+        adminInterface.start();
     }
 }
 

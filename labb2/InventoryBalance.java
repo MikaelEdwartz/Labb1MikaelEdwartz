@@ -147,7 +147,7 @@ public class InventoryBalance {
     }
 
     private void printProductSaldo(Product p) {
-        System.out.println(p + " " + nrOfProducts(p) + " st i lager");
+        System.out.println(p + " \t\t" + nrOfProducts(p) + "st");
     }
 
     public List<Product> getDistinctProducts(List<Product> listIn) {
