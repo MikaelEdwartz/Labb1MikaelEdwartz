@@ -1,4 +1,7 @@
-package se.iths.labborationer.labb2;
+package se.iths.labborationer.labb2MikaelEdwartz.Inventory;
+
+import se.iths.labborationer.labb2MikaelEdwartz.Products.Product;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.ProductCategory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,7 +26,6 @@ public class InventoryBalance {
                 .distinct()
                 .sorted(sortByNaturalOrder())
                 .forEach(this::printProductSaldo);
-
     }
 
     public void add(Product product) {

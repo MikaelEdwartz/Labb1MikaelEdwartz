@@ -1,7 +1,10 @@
-package se.iths.labborationer.labb2;
+package se.iths.labborationer.labb2MikaelEdwartz.FileHandling;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import se.iths.labborationer.labb2MikaelEdwartz.Inventory.InventoryBalance;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.Product;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.ProductCategory;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -35,7 +38,7 @@ public class GsonReader {
     }
 
     private InventoryBalance readFromPotentialFile() {
-        if(Files.exists(getPath()))
+        if(!(Files.exists(getPath())))
             return createNewFile();
         else
             return getInventoryBalanceFromFile();

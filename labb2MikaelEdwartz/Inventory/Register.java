@@ -1,33 +1,45 @@
-package se.iths.labborationer.labb2;
+package se.iths.labborationer.labb2MikaelEdwartz.Inventory;
+
+import se.iths.labborationer.labb2MikaelEdwartz.Products.Product;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Register {
-    List<Product> register;
+    private final List<Product> register;
 
     public Register() {
         this.register = new ArrayList<>();
     }
+
     public Register(List<Product> list){
         this.register = list;
+    }
+
+    public List<Product> getRegister(){
+        return this.register;
     }
 
     public int size(){
         return this.register.size();
     }
+
     public Product getProduct(int i ){
         return this.register.get(i);
     }
 
     public void printRegister(){
-
             this.register.stream()
                     .distinct()
-                    .sorted(Comparator.comparing(InventoryBalance.compareCategoryOrder())
-                            .thenComparing(Product::product))
+                    .sorted(sortByNaturalOrder())
                     .forEach(this::printProductsInRegister);
+    }
+
+    private static Comparator<Product> sortByNaturalOrder() {
+        return Comparator.comparing(InventoryBalance.compareCategoryOrder())
+                .thenComparing(Product::product);
     }
 
     private void printProductsInRegister(Product p) {
@@ -36,8 +48,12 @@ public class Register {
 
     public long sameProductsInRegister(Product productN){
         return this.register.stream()
-                .filter(product -> isSameProduct(productN, product))
+                .filter(isSameProduct(productN))
                 .count();
+    }
+
+    private Predicate<Product> isSameProduct(Product productN) {
+        return product -> isSameProduct(productN, product);
     }
 
     private static boolean isSameProduct(Product productN, Product product) {

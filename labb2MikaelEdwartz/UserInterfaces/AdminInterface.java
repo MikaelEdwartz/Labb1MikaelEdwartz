@@ -1,5 +1,10 @@
-package se.iths.labborationer.labb2;
+package se.iths.labborationer.labb2MikaelEdwartz.UserInterfaces;
 
+
+import se.iths.labborationer.labb2MikaelEdwartz.FileHandling.GsonReader;
+import se.iths.labborationer.labb2MikaelEdwartz.Inventory.InventoryBalance;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.Product;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.ProductCategory;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,32 +32,25 @@ public class AdminInterface {
     public void start() {
        boolean loop = true;
        while (loop) {
-            adminMenuGreeting();
-            var input = scanner.nextLine();
-            switch (input) {
-                case "1" -> addProductsToInventory(addProductsAndCategories()); //autoAddProducts();
-                case "2" -> removeProduct();
-                case "3" -> printProducts();
-                case "4" -> printCategory(getUserCategoryChoice(1));
-                case "5" -> searchBetweenPrices();
-                case "6" -> menu.start();
-                case "7" -> reader.save(this.inventory);
-                case "e" -> loop = false;
-            }
-        }
+           Greetings.adminMenuGreeting();
+           var input = scanner.nextLine();
+           loop = adminMenu(loop, input);
+       }
     }
 
-    private void adminMenuGreeting() {
-        System.out.println("-----------------------------------------");
-        System.out.println("Hej och välkommen till Kortedala mataffär");
-        System.out.println("1: Lägg till vara/skapa kategori");
-        System.out.println("2: ta bort varor");
-        System.out.println("3: Printa ut lagersaldo");
-        System.out.println("4: Sök via kategori");
-        System.out.println("5: Sök inom ett prisintervall");
-        System.out.println("6: Gå tillbaka till menyn");
-        System.out.println("7: Spara ändringar");
-        System.out.println("e: Avsluta");
+    private boolean adminMenu(boolean loop, String input) {
+        switch (input) {
+            case "1" -> addProductsToInventory(addProductsAndCategories()); //autoAddProducts();
+            case "2" -> removeProduct();
+            case "3" -> printProducts();
+            case "4" -> printCategory(getUserCategoryChoice());
+            case "5" -> searchBetweenPrices();
+            case "6" -> menu.start();
+            case "7" -> reader.save(this.inventory);
+            case "8" -> autoAddProducts();
+            case "e" -> loop = false;
+        }
+        return loop;
     }
 
     private void addProductsToInventory(ProductCategory category) {
@@ -97,9 +95,7 @@ public class AdminInterface {
             else if (userChoice.equals("e"))
                 start();
             else
-
                 return chosenCategory(Integer.parseInt(userChoice) - 2);
-
             listCategoriesToAdd();
         }
     }
@@ -145,7 +141,7 @@ public class AdminInterface {
 
     private void getCategoryAndPrintProducts() {
         System.out.println("Välj vilken kategori du vill radera en vara från.");
-        this.inventory.printProductWithCategory(getUserCategoryChoice(1));
+        this.inventory.printProductWithCategory(getUserCategoryChoice());
     }
 
     private void getProductAndRemove() {
@@ -196,9 +192,26 @@ public class AdminInterface {
         this.inventory.printProductWithCategory(category);
     }
 
-    private ProductCategory getUserCategoryChoice(int number) {
-        printCategoriesInOrder(number);
-        return chosenCategory(Integer.parseInt(scanner.nextLine())-1);
+    private ProductCategory getUserCategoryChoice() {
+        printCategoriesInOrder(1);
+        int option = getInput();
+        return chosenCategory(option-1);
+    }
+
+    private int getInput() {
+        int option = Integer.parseInt(scanner.nextLine());
+
+        while(!(option <= this.categoryList.size() && option  > 0))
+            option = printErrorMessageOrReturnNumber();
+
+        return option;
+    }
+
+    private int printErrorMessageOrReturnNumber() {
+        int option;
+        System.out.println("Felaktig inmatning, skriv in ny siffra.");
+        option = Integer.parseInt(scanner.nextLine());
+        return option;
     }
 
     private void searchBetweenPrices() {

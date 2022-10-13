@@ -1,4 +1,8 @@
-package se.iths.labborationer.labb2;
+package se.iths.labborationer.labb2MikaelEdwartz;
+import se.iths.labborationer.labb2MikaelEdwartz.FileHandling.GsonReader;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.ProductCategory;
+import se.iths.labborationer.labb2MikaelEdwartz.UserInterfaces.Menu;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

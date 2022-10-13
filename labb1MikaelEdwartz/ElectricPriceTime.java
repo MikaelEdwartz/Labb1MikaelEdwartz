@@ -1,5 +1,5 @@
 
-package se.iths.labborationer.labb1;
+package se.iths.labborationer.labb1MikaelEdwartz;
 
 public class ElectricPriceTime {
     private final int time;

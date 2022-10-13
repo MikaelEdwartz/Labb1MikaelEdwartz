@@ -1,4 +1,13 @@
-package se.iths.labborationer.labb2;
+package se.iths.labborationer.labb2MikaelEdwartz.UserInterfaces;
+
+import se.iths.labborationer.labb2MikaelEdwartz.Discount.Discounter;
+import se.iths.labborationer.labb2MikaelEdwartz.Discount.TenPercent;
+import se.iths.labborationer.labb2MikaelEdwartz.Discount.TwentyPercent;
+import se.iths.labborationer.labb2MikaelEdwartz.FileHandling.GsonReader;
+import se.iths.labborationer.labb2MikaelEdwartz.Inventory.InventoryBalance;
+import se.iths.labborationer.labb2MikaelEdwartz.Inventory.Register;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.Product;
+import se.iths.labborationer.labb2MikaelEdwartz.Products.ProductCategory;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,19 +35,28 @@ public class CustomerInterface {
 
     public void start(boolean loop) {
         while (loop) {
-            costumerMenuGreeting();
+            printLineBreak();
+            Greetings.costumerMenuGreeting();
             var input = scanner.nextLine();
-            System.out.println("-----------------------------------------");
-            switch (input) {
-                case "1" -> loopThroughCategories(register);
-                case "2" -> getSpecificCategory(register);
-                case "3" -> listAllProducts(register);
-                case "4" -> printRegister();
-                case "5" -> checkOut(register);
-                case "6" -> menu.start();
-                case "e" -> loop = false;
-            }
+            loop = customerMenu(loop, input);
         }
+    }
+
+    private boolean customerMenu(boolean loop, String input) {
+        switch (input) {
+            case "1" -> loopThroughCategories(register);
+            case "2" -> getSpecificCategory(register);
+            case "3" -> listAllProducts(register);
+            case "4" -> printRegister();
+            case "5" -> checkOut(register);
+            case "6" -> menu.start();
+            case "e" -> loop = false;
+        }
+        return loop;
+    }
+
+    private static void printLineBreak() {
+        System.out.println("-----------------------------------------");
     }
 
     private void printRegister() {
@@ -46,13 +64,6 @@ public class CustomerInterface {
         register.printRegister();
     }
 
-    private void costumerMenuGreeting() {
-        System.out.println("1. Vill gå igenom alla kategorier en i taget?");
-        System.out.println("2. Välj en specifik kategori");
-        System.out.println("3. Printa ut alla produkter");
-        System.out.println("4. print your register");
-        System.out.println("5. Gå till kassan och betala");
-    }
 
     private void loopThroughCategories(Register register) {
         for (int i = 0; i < this.categories.size(); i++)
@@ -155,14 +166,14 @@ public class CustomerInterface {
     }
 
     private void getSpecificCategory(Register register) {
-        var categoryChoice = getUserCategoryChoice(1);
+        var categoryChoice = getUserCategoryChoice();
         var list = new InventoryBalance(this.inventory.getListWithChosenCategory(categoryChoice));
         addToRegister(register, list);
     }
 
-    private ProductCategory getUserCategoryChoice(int number) {
-        printCategoriesInOrder(number);
-        return this.categories.get(scanner.nextInt() - 1);
+    private ProductCategory getUserCategoryChoice() {
+        printCategoriesInOrder();
+        return this.categories.get(Integer.parseInt(scanner.nextLine()) - 1);
     }
 
     private void addToRegister(Register register, InventoryBalance list) {
@@ -171,13 +182,13 @@ public class CustomerInterface {
         askAndAddProduct(register, list, choice);
     }
 
-    private void printCategoriesInOrder(int number) {
+    private void printCategoriesInOrder() {
         if (this.categories.size() >= 1) {
-            printCategoriesFormatted(number);
+            printCategoriesFormatted();
         }
-    } private void printCategoriesFormatted(int number) {
+    } private void printCategoriesFormatted() {
         for (int i = 0; i < this.categories.size(); i++)
-            System.out.println((i + number) + ". " + getCategoryAtIndex(i) + ".");
+            System.out.println((i + 1) + ". " + getCategoryAtIndex(i) + ".");
     }
 
     private ProductCategory getCategoryAtIndex(int i) {
@@ -193,7 +204,7 @@ public class CustomerInterface {
     }
 
     private void checkOut(Register register) {
-        var distinctRegister = new Register(register.getDistinctRegister(register.register));
+        var distinctRegister = new Register(register.getDistinctRegister(register.getRegister()));
         var priceToPay = valueOf(0);
         printReceipt(distinctRegister, priceToPay);
         saveInventoryToFile();

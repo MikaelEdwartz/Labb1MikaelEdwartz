@@ -1,5 +1,4 @@
-package se.iths.labborationer.labb1;
-import org.w3c.dom.ls.LSOutput;
+package se.iths.labborationer.labb1MikaelEdwartz;
 
 import java.util.Arrays;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package se.iths.labborationer.labb2;
+package se.iths.labborationer.labb2MikaelEdwartz.Products;
 
 import java.math.BigDecimal;
 import java.util.Objects;
