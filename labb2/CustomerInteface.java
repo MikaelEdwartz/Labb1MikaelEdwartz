@@ -7,17 +7,17 @@ import java.util.Scanner;
 import static java.math.BigDecimal.valueOf;
 
 public class CustomerInteface{
-    private final InventoryBalance balance;
+    private final InventoryBalance inventory;
     private final List<ProductCategory> categories;
     private final Scanner scanner;
     private int count;
     private final Register register;
     private final Menu menu;
-    private final JsonReader reader;
+    private final GsonReader reader;
 
 
-    public CustomerInteface(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner, Menu menu, JsonReader reader) {
-        this.balance = balance;
+    public CustomerInteface(InventoryBalance inventory, List<ProductCategory> categories, Scanner scanner, Menu menu, GsonReader reader) {
+        this.inventory = inventory;
         this.categories = categories;
         this.scanner = scanner;
         this.register = new Register();
@@ -66,7 +66,7 @@ public class CustomerInteface{
         for (int i = 0; i < this.categories.size(); i++) {
 
             var category = this.categories.get(i);
-            var list = new InventoryBalance(this.balance.getListWithChosenCategory(category));
+            var list = new InventoryBalance(this.inventory.getListWithChosenCategory(category));
             System.out.println("0 Nästa kategori");
             printProductsInStore(register, list);
             int choice = getProductOrQuit();
@@ -107,7 +107,7 @@ public class CustomerInteface{
             System.out.println("Finns inte tillräckligt med varor");
     }
     private int actualProductsInStore(InventoryBalance list, Register register, int i ){
-        int produtsInStore = (int) this.balance.nrOfProducts(list.getProduct(i));
+        int produtsInStore = (int) this.inventory.nrOfProducts(list.getProduct(i));
 
         for (int j = 0; j < register.sameProductsInRegister(list.getProduct(i)) ; j++) {
             produtsInStore--;
@@ -137,7 +137,7 @@ public class CustomerInteface{
     private void getSpecificCategor(Register register) {
         var categoryChoice = getUserCategoryChoice(1);
 
-        var list = new InventoryBalance(this.balance.getListWithChosenCategory(categoryChoice));
+        var list = new InventoryBalance(this.inventory.getListWithChosenCategory(categoryChoice));
 
         addToRegister(register, list);
 
@@ -167,7 +167,7 @@ public class CustomerInteface{
     //__________________________________________________________________________________
     private void listAllProducts(Register register) {
 
-        var list = new InventoryBalance(this.balance.getDistinctProducts(this.balance.getInventory()));
+        var list = new InventoryBalance(this.inventory.getDistinctProducts(this.inventory.getInventory()));
         while(true)
             addToRegister(register, list);
 
@@ -207,7 +207,7 @@ public class CustomerInteface{
 
         removeRegisterItemsFromBalance();
 
-        reader.save(this.balance);
+        reader.save(this.inventory);
 
         System.out.println("Tack för ditt köp, välkommen åter!");
         System.exit(0);
@@ -276,7 +276,7 @@ public class CustomerInteface{
     }
     private void removeRegisterItemsFromBalance(){
         for (int i = 0; i < register.size(); i++)
-            this.balance.remove(getProduct(this.register, i));
+            this.inventory.remove(getProduct(this.register, i));
 
     }
 
@@ -304,7 +304,7 @@ public class CustomerInteface{
     }
 
     private void printCategory(ProductCategory category) {
-        this.balance.printProductWithCategory(category);
+        this.inventory.printProductWithCategory(category);
     }
 
 
@@ -324,32 +324,32 @@ public class CustomerInteface{
 
 
     private void printProducts() {
-        this.balance.printbalancetest();
+        this.inventory.printbalancetest();
     }
 
 
     private void startupkategorier() {
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
-        this.balance.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
-        this.balance.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
-        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
-        this.balance.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
-        this.balance.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Milk", valueOf(199), 10938));
+        this.inventory.add(new Product(new ProductCategory("Dairy"), "Cream", valueOf(11), 1098));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Chicken", valueOf(12), 109));
+        this.inventory.add(new Product(new ProductCategory("Meat"), "Beef", valueOf(1), 10));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Apples", valueOf(11), 1038));
+        this.inventory.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
+        this.inventory.add(new Product(new ProductCategory("Vegetable"), "Carrot", valueOf(17), 938));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
+        this.inventory.add(new Product(new ProductCategory("Fruit"), "Banana", valueOf(14), 18));
 
-        for (int i = 0; i < this.balance.size(); i++) {
-            if (!(this.categories.contains(this.balance.getCategory(i))))
-                this.categories.add(this.balance.getCategory(i));
+        for (int i = 0; i < this.inventory.size(); i++) {
+            if (!(this.categories.contains(this.inventory.getCategory(i))))
+                this.categories.add(this.inventory.getCategory(i));
         }
     }
 
