@@ -26,16 +26,16 @@ public class Menu {
     public void start() {
         boolean loop = true;
         startUpGreeting();
-        startUpMenu(loop);
+        startUpMenu();
     }
 
-    private void startUpMenu(boolean loop) {
-        while (loop) {
+    private void startUpMenu() {
+        while (true) {
             var input = scanner.nextLine();
             switch (input) {
                 case "1" -> adminInterface.start();
-                case "2" -> costumerInterface.start(true);
-                case "e" -> loop = false;
+                case "2" -> costumerInterface.start();
+                case "e" -> System.exit(0);
             }
         }
     }

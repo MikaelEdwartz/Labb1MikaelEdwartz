@@ -33,16 +33,16 @@ public class CustomerInterface {
         this.reader = reader;
     }
 
-    public void start(boolean loop) {
-        while (loop) {
+    public void start() {
+        while (true) {
             printLineBreak();
             Greetings.costumerMenuGreeting();
             var input = scanner.nextLine();
-            loop = customerMenu(loop, input);
+            customerMenu(input);
         }
     }
 
-    private boolean customerMenu(boolean loop, String input) {
+    private void customerMenu(String input) {
         switch (input) {
             case "1" -> loopThroughCategories(register);
             case "2" -> getSpecificCategory(register);
@@ -50,9 +50,9 @@ public class CustomerInterface {
             case "4" -> printRegister();
             case "5" -> checkOut(register);
             case "6" -> menu.start();
-            case "e" -> loop = false;
+            case "e" -> System.exit(0);
         }
-        return loop;
+
     }
 
     private static void printLineBreak() {
@@ -119,7 +119,7 @@ public class CustomerInterface {
     private int getProductOrQuit() {
         int choice = getChoice();
         if (choice == count)
-            start(true);
+            start();
         return choice;
     }
 

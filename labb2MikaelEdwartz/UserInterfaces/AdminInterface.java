@@ -30,15 +30,14 @@ public class AdminInterface {
     }
 
     public void start() {
-       boolean loop = true;
-       while (loop) {
+       while (true) {
            Greetings.adminMenuGreeting();
            var input = scanner.nextLine();
-           loop = adminMenu(loop, input);
+           adminMenu(input);
        }
     }
 
-    private boolean adminMenu(boolean loop, String input) {
+    private void adminMenu(String input) {
         switch (input) {
             case "1" -> addProductsToInventory(addProductsAndCategories()); //autoAddProducts();
             case "2" -> removeProduct();
@@ -48,9 +47,8 @@ public class AdminInterface {
             case "6" -> menu.start();
             case "7" -> reader.save(this.inventory);
             case "8" -> autoAddProducts();
-            case "e" -> loop = false;
+            case "e" -> System.exit(0);
         }
-        return loop;
     }
 
     private void addProductsToInventory(ProductCategory category) {
