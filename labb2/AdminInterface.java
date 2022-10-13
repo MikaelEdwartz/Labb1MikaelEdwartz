@@ -41,6 +41,7 @@ public class AdminInterface {
             }
         }
     }
+
     private void adminMenuGreeting() {
         System.out.println("-----------------------------------------");
         System.out.println("Hej och välkommen till Kortedala mataffär");
@@ -54,22 +55,26 @@ public class AdminInterface {
         System.out.println("e: Avsluta");
     }
 
-    public void addProductsToInventory(ProductCategory category) {
+    private void addProductsToInventory(ProductCategory category) {
         this.inventory.add(new Product(category, getProductName(), getProductPrice(), getProductSerialCode()));
     }
+
     private int getProductSerialCode() {
         System.out.println("Vänligen skriv in streckkod på varan.");
         return Integer.parseInt(scanner.nextLine());
     }
+
     private BigDecimal getProductPrice() {
         System.out.println("Vänligen skriv in pris på varan.");
         return valueOf(Long.parseLong(scanner.nextLine()));
     }
+
     private String getProductName() {
         System.out.println("Vänligen skriv in namn på varan");
         return scanner.nextLine();
     }
-    public ProductCategory addProductsAndCategories() {
+
+    private ProductCategory addProductsAndCategories() {
         addFirstCategoryIfEmpty();
         listCategoriesToAdd();
         return addNewCategoryOrReturnCategory();
@@ -83,6 +88,7 @@ public class AdminInterface {
     private boolean isListEmpty() {
         return this.categoryList.isEmpty();
     }
+
     private ProductCategory addNewCategoryOrReturnCategory() {
         while (true) {
             String userChoice = scanner.nextLine();
@@ -97,102 +103,126 @@ public class AdminInterface {
             listCategoriesToAdd();
         }
     }
+
     private ProductCategory chosenCategory(int userChoice) {
         return this.categoryList.get(userChoice);
     }
+
     private void addFirstCategory() {
             System.out.println("Det verkar inte finnas någon kategori för matvaror än.");
             createNewCategory(scanner);
     }
-    public void createNewCategory(Scanner scanner) {
+
+    private void createNewCategory(Scanner scanner) {
         System.out.println("Vänligen skriv in namn på ny kategori.");
         this.categoryList.add(new ProductCategory(scanner.nextLine()));
     }
+
     private void listCategoriesToAdd() {
         System.out.println("1. Lägg till ytterligare kategori");
         printCategoriesInOrder(2);
     }
+
     private void printCategoriesInOrder(int number) {
         if (this.categoryList.size() >= 1)
             printCategoriesFormatted(number);
     }
+
     private void printCategoriesFormatted(int number) {
         for (int i = 0; i < this.categoryList.size(); i++)
             System.out.println((i + number) + ". " + chosenCategory(i) + ".");
     }
+
     private void removeProduct() {
         getCategoryChoiceAndPrintProducts();
         getProductAndRemove();
     }
+
     private void getCategoryChoiceAndPrintProducts() {
         getCategoryAndPrintProducts();
         System.out.println("Skriv in produktnamnet på varan du vill ta bort");
     }
+
     private void getCategoryAndPrintProducts() {
         System.out.println("Välj vilken kategori du vill radera en vara från.");
         this.inventory.printProductWithCategory(getUserCategoryChoice(1));
     }
+
     private void getProductAndRemove() {
         String input = scanner.nextLine();
         String choice = removeAllProductsChoice();
         removeOption(input, choice);
     }
+
     private String removeAllProductsChoice() {
         System.out.println("Vill du radera alla varor? (J/N)");
         return scanner.nextLine();
     }
+
     private void removeOption(String input, String choice) {
         if(choice.equals("J"))
             this.inventory.remove(input);
         else
             removeMultipleProducts(input);
     }
+
     private void removeMultipleProducts(String input) {
         int nrToRemove = printAndGetNrToRemove();
         var listOfProductsToRemove = this.inventory.listToRemove(input);
         removeFromList(listOfProductsToRemove, nrToRemove);
     }
+
     private int printAndGetNrToRemove() {
         System.out.println("Hur många vill du ta bort?");
         return Integer.parseInt(scanner.nextLine());
     }
+
     private void removeFromList(List<Product> tempList, int nrToRemove) {
         for (int i = 0; i < nrToRemove; i++)
             this.inventory.remove(tempList.get(i));
     }
+
     private void printProducts() {
         printHeader();
         this.inventory.printbalancetest();
     }
+
     private void printHeader() {
         System.out.println("Kategori" + printTab(2) + "Varunamn" + printTab(2) + "Pris" + printTab(1) + "EAN-kod" + printTab(2) + " lagersaldo" );
     }
+
     private void printCategory(ProductCategory category) {
         printHeader();
         this.inventory.printProductWithCategory(category);
     }
+
     private ProductCategory getUserCategoryChoice(int number) {
         printCategoriesInOrder(number);
         return chosenCategory(Integer.parseInt(scanner.nextLine())-1);
     }
-    public void searchBetweenPrices() {
+
+    private void searchBetweenPrices() {
         BigDecimal lowestPrice = getLowestSearchPrice();
         BigDecimal highestPrice = getHighestSearchPrice();
         printHeader();
         this.inventory.printBetweenPrices(lowestPrice, highestPrice);
     }
+
     private BigDecimal getHighestSearchPrice() {
         System.out.println("Vad är det högsta priset");
         return valueOf(Long.parseLong(scanner.nextLine()));
     }
+
     private BigDecimal getLowestSearchPrice() {
         System.out.println("Vad är det lägsta priset");
         return valueOf(Long.parseLong(scanner.nextLine()));
     }
+
     private String printTab(int nrOfTabs){
         return "\t".repeat(Math.max(0, nrOfTabs));
     }
-    public void autoAddProducts() {
+
+    private void autoAddProducts() {
         addProducts();
         addCategories();
     }
