@@ -12,78 +12,78 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.math.BigDecimal.valueOf;
 
 public class GsonReader {
     private final Gson gson;
-    private InventoryBalance balance;
     private final List<ProductCategory> categories;
-    private String data;
-
+    private final String folder;
+    private final Path store;
 
     public GsonReader(List<ProductCategory> categories){
         this.gson = new Gson();
-        this.balance = balance;
         this.categories = categories;
-        //this.data = gson.toJson(this.balance);
-
+        this.folder = System.getProperty("user.home");
+        this.store = getPath();
     }
 
+    private Path getPath() {
+        return Path.of(this.folder, "KortedalaAffär", "products.txt");
+    }
 
     public InventoryBalance read(){
-        String folder = System.getProperty("user.home");
-        Path store = Path.of(folder, "KortedalaAffär", "products.txt");
-        Path filePath = store;
-        boolean exist = Files.exists(filePath);
+        return readFromPotentialFile();
+    }
 
-        if(!(exist)) {
-            try {
-                Files.createDirectory(Path.of(folder, "KortedalaAffär"));
+    private InventoryBalance readFromPotentialFile() {
+        if(Files.exists(getPath()))
+            return createNewFile();
+        else
+            return getInventoryBalanceFromFile();
+    }
 
-                return new InventoryBalance();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());;
-            }
+    private InventoryBalance createNewFile() {
+        try {
+            Files.createDirectory(Path.of(this.folder, "KortedalaAffär"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
+        return new InventoryBalance();
+    }
 
-
-
-        try (Reader reader = new FileReader(store.toFile())) {
-
-            Type getTypeList = new TypeToken<ArrayList<Product>>() {}.getType();
-            List<Product> list = gson.fromJson(reader, getTypeList);
-            var b = new InventoryBalance(list);
-            addCategories(b);
-            return b;
+    private InventoryBalance getInventoryBalanceFromFile() {
+        try (Reader reader = new FileReader(this.store.toFile())) {
+            return readFileAndReturnList(reader);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-    return new InventoryBalance();
+        return null;
     }
 
-    private void addCategories(InventoryBalance b) {
-        for (int i = 0; i < b.size(); i++) {
-            if (!(this.categories.contains(b.getCategory(i))))
-                this.categories.add(b.getCategory(i));
-        }
+    private InventoryBalance readFileAndReturnList(Reader reader) {
+        Type getTypeList = new TypeToken<ArrayList<Product>>() {}.getType();
+        List<Product> list = gson.fromJson(reader, getTypeList);
+        var inventoryBalance = new InventoryBalance(list);
+        addCategories(inventoryBalance);
+        return inventoryBalance;
+    }
+
+    private void addCategories(InventoryBalance inventoryBalance) {
+        for (int i = 0; i < inventoryBalance.size(); i++)
+            addIfCategoryDoesntExists(inventoryBalance, i);
+    }
+
+    private void addIfCategoryDoesntExists(InventoryBalance b, int i) {
+        if (!(this.categories.contains(b.getCategory(i))))
+            this.categories.add(b.getCategory(i));
     }
 
     public void save(InventoryBalance balance){
-
-        data = gson.toJson(balance.getInventory());
-        String folder = System.getProperty("user.home");
-        Path store = Path.of(folder, "KortedalaAffär", "products.txt");
-        Path filePath = store;
-        boolean exist = Files.exists(filePath);
+        var data = gson.toJson(balance.getInventory());
         try {
-//            if(!(exist))
-//                Files.createDirectory(Path.of(folder, "KortedalaAffär"));
-
-            Files.writeString(store, data);
-
+            Files.writeString(this.store, data);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 }
