@@ -1,6 +1,6 @@
 package se.iths.labborationer.labb2MikaelEdwartz.UserInterfaces;
 
-public class Greetings {
+public abstract class Greetings {
     public static void costumerMenuGreeting() {
         System.out.println("1. Vill gå igenom alla kategorier en i taget?");
         System.out.println("2. Välj en specifik kategori");
