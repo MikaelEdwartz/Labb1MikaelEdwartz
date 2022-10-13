@@ -3,7 +3,6 @@ package se.iths.labborationer.labb2;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -15,14 +14,14 @@ import java.util.List;
 
 import static java.math.BigDecimal.valueOf;
 
-public class JsonReader {
+public class GsonReader {
     private final Gson gson;
     private InventoryBalance balance;
     private final List<ProductCategory> categories;
     private String data;
 
 
-    public JsonReader(List<ProductCategory> categories){
+    public GsonReader(List<ProductCategory> categories){
         this.gson = new Gson();
         this.balance = balance;
         this.categories = categories;

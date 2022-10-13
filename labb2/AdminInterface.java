@@ -184,7 +184,7 @@ public class AdminInterface {
 
     private void printProducts() {
         printHeader();
-        this.inventory.printbalancetest();
+        this.inventory.printBalance();
     }
 
     private void printHeader() {

@@ -6,18 +6,17 @@ import java.util.Scanner;
 
 public class Menu {
     private final Scanner scanner;
-    private final CustomerInteface costumerInterface;
+    private final CustomerInterface costumerInterface;
     private final AdminInterface adminInterface;
     private final Menu menu;
-    private final InventoryBalance balance;
+    private final InventoryBalance inventory;
 
-
-    public Menu(InventoryBalance balance, List<ProductCategory> categories, Scanner scanner, JsonReader reader) {
+    public Menu(InventoryBalance inventory, List<ProductCategory> categories, Scanner scanner, GsonReader reader) {
         this.scanner = scanner;
         this.menu = this;
-        this.balance = balance;
-        costumerInterface = new CustomerInteface(this.balance, categories, scanner, this.menu, reader);
-        adminInterface = new AdminInterface(this.balance, categories, this.scanner, this.menu, reader);
+        this.inventory = inventory;
+        costumerInterface = new CustomerInterface(this.inventory, categories, scanner, this.menu, reader);
+        adminInterface = new AdminInterface(this.inventory, categories, this.scanner, this.menu, reader);
     }
 
     public void start() {
@@ -25,12 +24,13 @@ public class Menu {
         startUpGreeting();
         startUpMenu(loop);
     }
+
     private void startUpMenu(boolean loop) {
         while (loop) {
-            var input = scanner.next();
+            var input = scanner.nextLine();
             switch (input) {
                 case "1" -> adminInterface.start();
-                case "2" -> costumerInterface.start(loop);
+                case "2" -> costumerInterface.start(true);
                 case "e" -> loop = false;
             }
         }
@@ -40,6 +40,7 @@ public class Menu {
         if(inventoryIsEmpty())
             firstGreeting();
         printGreeting();
+
     }
 
     private static void printGreeting() {
@@ -50,7 +51,7 @@ public class Menu {
     }
 
     private boolean inventoryIsEmpty() {
-        return this.balance.getInventory().isEmpty();
+        return this.inventory.getInventory().isEmpty();
     }
 
     private void firstGreeting(){
