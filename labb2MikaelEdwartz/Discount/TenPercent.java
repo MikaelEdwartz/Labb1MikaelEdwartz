@@ -6,6 +6,9 @@ public class TenPercent implements Discounter{
 
     @Override
     public BigDecimal apply(BigDecimal amount){
-        return amount.multiply(BigDecimal.valueOf(0.9));
+        if (amount.compareTo(LOWEST_DISCOUNT) > 0 && amount.compareTo(HIGHEST_DISCOUNT) < 0)
+             return amount.multiply(BigDecimal.valueOf(0.9));
+        else
+            return amount;
     }
 }

@@ -1,6 +1,8 @@
 package se.iths.labborationer.labb2MikaelEdwartz.Discount;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 import static java.math.BigDecimal.valueOf;
@@ -10,12 +12,12 @@ public interface Discounter extends UnaryOperator<BigDecimal> {
     BigDecimal LOWEST_DISCOUNT = valueOf(1000);
 
 
-    static BigDecimal applyDiscount(BigDecimal amount){
-        if (amount.compareTo(LOWEST_DISCOUNT) > 0 && amount.compareTo(HIGHEST_DISCOUNT) < 0)
-            return new TenPercent().apply(amount);
-        else if (amount.compareTo(HIGHEST_DISCOUNT) > 0)
-            return new TwentyPercent().apply(amount);
-        else
-            return amount;
+    static BigDecimal applyDiscount(BigDecimal amount) {
+        return List.of(new TenPercent(), new TwentyPercent())
+                .stream()
+                .map(d -> d.apply(amount))
+                .reduce(BigDecimal::min)
+                .get();
+
     }
 }
