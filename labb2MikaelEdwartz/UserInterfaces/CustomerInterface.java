@@ -217,8 +217,7 @@ public class CustomerInterface {
         for (int i = 0; i < distinctRegister.size(); i++)
             priceToPay = printProductsAndGetTotalPrice(distinctRegister, priceToPay, i);
 
-        BigDecimal discountedPrice = priceToPay;
-        discountedPrice = getDiscountedPrice(priceToPay, discountedPrice);
+        var discountedPrice = getDiscountedPrice(priceToPay);
         System.out.println();
         printPriceAndDiscount(priceToPay, discountedPrice);
     }
@@ -271,13 +270,8 @@ public class CustomerInterface {
         return 0;
     }
 
-    private BigDecimal getDiscountedPrice(BigDecimal priceToPay, BigDecimal discountedPrice) {
-        if(priceToPay.compareTo(valueOf(2000)) >= 0)
-            return applyDiscount(new TwentyPercent(), priceToPay);
-        else if(priceToPay.compareTo(valueOf(1000)) >= 0)
-            return applyDiscount(new TenPercent(), priceToPay);
-
-        return discountedPrice;
+    private BigDecimal getDiscountedPrice(BigDecimal priceToPay) {
+        return Discounter.applyDiscount(priceToPay);
     }
 
     private String printTab(int nrOfTabs){
@@ -290,25 +284,9 @@ public class CustomerInterface {
     }
 
     private  void printDiscountValue(BigDecimal priceToPay) {
-        var discount = getDiscount(priceToPay);
-        if(discount.compareTo(valueOf(1)) > 0)
-            System.out.println("Rabatt " + printTab(8) + discount + " kr");
-    }
-
-    private static BigDecimal getDiscount(BigDecimal priceToPay) {
-        var discount = valueOf(0);
-
-        if(priceToPay.compareTo(valueOf(2000)) > 0)
-             discount = priceToPay.multiply(valueOf(0.2));
-        else if(priceToPay.compareTo(valueOf(1000)) > 0)
-             discount = priceToPay.multiply(valueOf(0.1));
-
-        return discount;
-    }
-
-    private BigDecimal applyDiscount(Discounter discount, BigDecimal amount){
-        return discount.apply(amount);
-
+        var discountedPrice = priceToPay.subtract(getDiscountedPrice(priceToPay));
+        if(discountedPrice.compareTo(valueOf(1)) > 0)
+            System.out.println("Rabatt " + printTab(8) + discountedPrice + " kr");
     }
 
     private void removeRegisterItemsFromBalance(){
