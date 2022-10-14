@@ -15,7 +15,7 @@ public interface Discounter extends UnaryOperator<BigDecimal> {
     static BigDecimal applyDiscount(BigDecimal amount) {
         return List.of(new TenPercent(), new TwentyPercent())
                 .stream()
-                .map(d -> d.apply(amount))
+                .map(discounter -> discounter.apply(amount))
                 .reduce(BigDecimal::min)
                 .get();
 
