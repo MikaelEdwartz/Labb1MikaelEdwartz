@@ -66,18 +66,17 @@ public class GsonReader {
         Type getTypeList = new TypeToken<ArrayList<Product>>() {}.getType();
         List<Product> list = gson.fromJson(reader, getTypeList);
         var inventoryBalance = new InventoryBalance(list);
-        addCategories(inventoryBalance);
+        addCategoriest(inventoryBalance);
         return inventoryBalance;
     }
 
-    private void addCategories(InventoryBalance inventoryBalance) {
-        for (int i = 0; i < inventoryBalance.size(); i++)
-            addIfCategoryDoesntExists(inventoryBalance, i);
-    }
-
-    private void addIfCategoryDoesntExists(InventoryBalance b, int i) {
-        if (!(this.categories.contains(b.getCategory(i))))
-            this.categories.add(b.getCategory(i));
+    private void addCategoriest(InventoryBalance inventoryBalance){
+        inventoryBalance
+                .getInventory()
+                .stream()
+                .map(Product::category)
+                .distinct()
+                .forEach(this.categories::add);
     }
 
     public void save(InventoryBalance balance){
