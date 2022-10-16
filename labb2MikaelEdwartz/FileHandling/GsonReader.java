@@ -66,11 +66,11 @@ public class GsonReader {
         Type getTypeList = new TypeToken<ArrayList<Product>>() {}.getType();
         List<Product> list = gson.fromJson(reader, getTypeList);
         var inventoryBalance = new InventoryBalance(list);
-        addCategoriest(inventoryBalance);
+        addCategories(inventoryBalance);
         return inventoryBalance;
     }
 
-    private void addCategoriest(InventoryBalance inventoryBalance){
+    private void addCategories(InventoryBalance inventoryBalance){
         inventoryBalance
                 .getInventory()
                 .stream()
